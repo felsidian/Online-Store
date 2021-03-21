@@ -1,0 +1,14 @@
+/ (/catalog)	|			| List of products. User can add products to the cart. Admin can add products.
+/product		|			| Information about particular product. User can add it to the cart. Admin can edit product parameters.
+/singin			| everyone	| Login page
+/singup			|			| Registration page
+/cart			|			| List of products from cart. Button to create the order (for users) or button to register and then create the order (for everyone).
+
+/profile		|   user	| List of all orders user made. Settings (language etc.)
+/order			|			| Order confirmation or information about the particular order (content, status, date, button to cancel etc). Admin can change status of the order.
+
+/users			|   admin	| List of all users. Option to block/unblock user.
+/orders			|			| List of all orders. Option to change status of the order.
+
+
+For each page the filter is applied. Filter checks session info, defines user role, puts role as an attribute. If user with his role cant view page at all Filter forwards request to error page or /.
