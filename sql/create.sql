@@ -21,8 +21,8 @@ CREATE TABLE `user` (
                         id int NOT NULL AUTO_INCREMENT,
                         name varchar(255) NOT NULL,
                         email varchar(320) NOT NULL,
-                        password varchar(128) NOT NULL, -- hex string representation of 512 bits PBKDF2 hash
-                        salt varchar(32) NOT NULL,      -- hex string representation of 128 bits salt
+                        password varchar(160) NOT NULL, -- hex string representation of 512 bits PBKDF2 hash + 128 bits of salt (length=128+32)
+                        locale varchar(2), -- two-letter code of locale (ISO 639-1)
                         phone_number varchar(13),
                         role_id int,
                         blocked bit NOT NULL,           -- user is blocked if <> 0
