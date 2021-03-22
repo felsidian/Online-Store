@@ -13,7 +13,6 @@ public class CartServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        // TODO
         // some business logic
 
         String viewPath = "/WEB-INF/jsp/cart.jsp";

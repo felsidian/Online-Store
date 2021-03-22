@@ -18,9 +18,9 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "CatalogServlet", value = "")
 public class CatalogServlet extends HttpServlet {
 
+    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        // TODO
         // some business logic
 
         String viewPath = "/WEB-INF/jsp/catalog.jsp";
@@ -54,6 +54,13 @@ public class CatalogServlet extends HttpServlet {
 //
 //        HttpSession session = request.getSession();
         //User u = User.builder();
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String viewPath = "/WEB-INF/jsp/catalog.jsp";
+        RequestDispatcher disp = request.getRequestDispatcher(viewPath);
+        disp.forward(request, response);
     }
 
     public void destroy() {

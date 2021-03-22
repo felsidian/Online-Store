@@ -16,8 +16,6 @@ public class User {
     String email;
     @NonNull
     String password;
-    @NonNull
-    String salt;
     String phoneNumber;
     @NonNull
     String roleName; // "user" or "admin"

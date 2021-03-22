@@ -28,9 +28,9 @@ public class UserDAO {
         User user = null;
         try (Connection con = DBHelper.getInstance().getConnection();
              PreparedStatement pst = con.prepareStatement(SQL_FIND_USER_BY_ID)) {
-             pst.setLong(1, id);
-             try (ResultSet rs = pst.executeQuery()){
-                 user = mapResultSet(rs);
+            pst.setLong(1, id);
+            try (ResultSet rs = pst.executeQuery()) {
+                user = mapResultSet(rs);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -43,7 +43,7 @@ public class UserDAO {
         try (Connection con = DBHelper.getInstance().getConnection();
              PreparedStatement pst = con.prepareStatement(SQL_FIND_USER_BY_EMAIL)) {
             pst.setString(1, email);
-            try (ResultSet rs = pst.executeQuery()){
+            try (ResultSet rs = pst.executeQuery()) {
                 user = mapResultSet(rs);
             }
         } catch (SQLException ex) {
@@ -53,14 +53,18 @@ public class UserDAO {
     }
 
     private static User mapResultSet(ResultSet rs) {
+        User user = null;
         try {
-            return User.builder().id(rs.getLong(FIELD_ID)).name(rs.getString(FIELD_NAME)).
-                    email(rs.getString(FIELD_EMAIl)).password(rs.getString(FIELD_PASSWORD)).
-                    salt(rs.getString(FIELD_SALT)).phoneNumber(rs.getString(FIELD_PHONE_NUMBER)).
-                    roleName(rs.getString(FIELD_ROLE_NAME)).blocked(rs.getBoolean(FIELD_BLOCKED)).build();
+            if (rs.next()) {
+                user = User.builder().id(rs.getLong(FIELD_ID)).name(rs.getString(FIELD_NAME)).
+                        email(rs.getString(FIELD_EMAIl)).password(rs.getString(FIELD_PASSWORD)).
+                        phoneNumber(rs.getString(FIELD_PHONE_NUMBER)).roleName(rs.getString(FIELD_ROLE_NAME))
+                        .blocked(rs.getBoolean(FIELD_BLOCKED)).build();
+            }
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            e.printStackTrace();
         }
+        return user;
     }
 
 }
