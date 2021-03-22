@@ -9,14 +9,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <title><fmt:message key="title.singin" /></title>
 </head>
 <body>
-    <h1><%= "Hello World! FROM index.jsp" %>
-    </h1>
-    <h1><fmt:message key="label.welcome" />
+    <h1><fmt:message key="title.singin" />
     </h1>
     <br/>
-    <a href="hello-servlet">Hello Servlet</a>
 </body>
 </html>
