@@ -1,6 +1,7 @@
 package com.gmail.hryhoriev75.onlineshop.model;
 
 import com.gmail.hryhoriev75.onlineshop.db.DBHelper;
+import com.gmail.hryhoriev75.onlineshop.model.entity.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,17 +11,26 @@ import java.sql.SQLException;
 public class UserDAO {
 
     private static final String SQL_FIND_USER_BY_ID =
-            "SELECT * FROM users WHERE login=?";
+            "SELECT user.*, role.name AS role_name FROM user LEFT JOIN role ON role_id=role.id WHERE user.id=?";
+    private static final String SQL_FIND_USER_BY_EMAIL =
+            "SELECT user.*, role.name AS role_name FROM user LEFT JOIN role ON role_id=role.id WHERE user.email=?";
+    private static final String FIELD_ID = "id";
+    private static final String FIELD_NAME = "name";
+    private static final String FIELD_EMAIl = "email";
+    private static final String FIELD_PASSWORD = "password";
+    private static final String FIELD_SALT = "salt";
+    private static final String FIELD_PHONE_NUMBER = "phone_number";
+    private static final String FIELD_BLOCKED = "blocked";
+    private static final String FIELD_ROLE_NAME = "role_name";
 
-    public User findUserById(long id) {
+
+    public static User findUserById(long id) {
         User user = null;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT name, email FROM user");
-             ResultSet rs = pst.executeQuery();) {
-
-            while (rs.next()) {
-                rs.getString("name");
-                rs.getString("email");
+             PreparedStatement pst = con.prepareStatement(SQL_FIND_USER_BY_ID)) {
+             pst.setLong(1, id);
+             try (ResultSet rs = pst.executeQuery()){
+                 user = mapResultSet(rs);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -28,5 +38,29 @@ public class UserDAO {
         return user;
     }
 
+    public static User findUserByEmail(String email) {
+        User user = null;
+        try (Connection con = DBHelper.getInstance().getConnection();
+             PreparedStatement pst = con.prepareStatement(SQL_FIND_USER_BY_EMAIL)) {
+            pst.setString(1, email);
+            try (ResultSet rs = pst.executeQuery()){
+                user = mapResultSet(rs);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return user;
+    }
+
+    private static User mapResultSet(ResultSet rs) {
+        try {
+            return User.builder().id(rs.getLong(FIELD_ID)).name(rs.getString(FIELD_NAME)).
+                    email(rs.getString(FIELD_EMAIl)).password(rs.getString(FIELD_PASSWORD)).
+                    salt(rs.getString(FIELD_SALT)).phoneNumber(rs.getString(FIELD_PHONE_NUMBER)).
+                    roleName(rs.getString(FIELD_ROLE_NAME)).blocked(rs.getBoolean(FIELD_BLOCKED)).build();
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.gmail.hryhoriev75.onlineshop.model;
+package com.gmail.hryhoriev75.onlineshop.model.entity;
 
 public abstract class Entity {
 

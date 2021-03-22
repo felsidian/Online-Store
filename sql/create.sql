@@ -1,4 +1,5 @@
-# noinspection SqlNoDataSourceInspectionForFile
+-- noinspection SqlDialectInspectionForFile
+-- noinspection SqlNoDataSourceInspectionForFile
 
 DROP TABLE IF EXISTS `role`;
 DROP TABLE IF EXISTS `user`;
@@ -53,6 +54,7 @@ CREATE TABLE `product` (
 CREATE TABLE `parameter` (
                              id int NOT NULL AUTO_INCREMENT,
                              name varchar(50) NOT NULL,
+                             type tinyint NOT NULL, -- 0 - text, 1 - decimal, 2 - set of values
                              PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

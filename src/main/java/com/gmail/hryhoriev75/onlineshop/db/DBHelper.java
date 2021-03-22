@@ -21,11 +21,6 @@ public class DBHelper {
         String dbName = System.getProperty("RDS_DB_NAME");
         String userName = System.getProperty("RDS_USERNAME");
         String password = System.getProperty("RDS_PASSWORD");
-        hostname = "database-1.cvjm1bara8gb.eu-central-1.rds.amazonaws.com";
-        port = "3306";
-        dbName = "database1";
-        userName = "admin";
-        password = "joZW0K5agjQBawmHgB8n";
 
         HikariConfig config = new HikariConfig();
         config.setDriverClassName("com.mysql.cj.jdbc.Driver");

@@ -1,4 +1,4 @@
-package com.gmail.hryhoriev75.onlineshop.model;
+package com.gmail.hryhoriev75.onlineshop.model.entity;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -7,6 +7,7 @@ import lombok.Value;
 @Value
 @Builder(toBuilder = true)
 public class User {
+
     @NonNull
     long id;
     @NonNull
@@ -19,7 +20,7 @@ public class User {
     String salt;
     String phoneNumber;
     @NonNull
-    String role; // "user" or "admin"
+    String roleName; // "user" or "admin"
     @NonNull
     boolean blocked;
 
