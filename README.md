@@ -17,3 +17,6 @@
 - додавання/видалення товарів, зміни інформації про товар;
 - блокування/розблокування користувача;
 - переведення замовлення зі статусу *зареєстрований* до *оплачений* або *скасований*.
+
+## DB schema
+[![DB schema](https://raw.githubusercontent.com/felsidian/Online-Store/master/sql/schema.png "DB schema")](https://raw.githubusercontent.com/felsidian/Online-Store/master/sql/schema.png "DB schema")
