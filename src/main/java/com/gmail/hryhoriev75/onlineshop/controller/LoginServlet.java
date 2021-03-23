@@ -14,61 +14,89 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-@WebServlet(name = "LoginServlet", value = "/singin")
+@WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
 
-    private static final String LOGIN_VIEW_PATH = "/WEB-INF/jsp/singin.jsp";
+    private static final String LOGIN_VIEW_PATH = "/WEB-INF/jsp/login.jsp";
     private static final String CATALOG_PATH = "/";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        RequestDispatcher disp = request.getRequestDispatcher(LOGIN_VIEW_PATH);
-        disp.forward(request, response);
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("email") != null) {
+            response.sendRedirect(CATALOG_PATH);
+        } else {
+            RequestDispatcher disp = request.getRequestDispatcher(LOGIN_VIEW_PATH);
+            disp.forward(request, response);
+        }
 
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("email") != null) {
+            response.sendRedirect(CATALOG_PATH);
+            return;
+        }
+
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String remember = "on".equals(request.getParameter("remember")) ? "checked" : "";
+
+        Map<String, String> viewAttributes = new HashMap<>();
+        viewAttributes.put("email", email);
+        viewAttributes.put("remember", remember);
 
         if(!Security.isEmailValid(email)) {
-            passErrorToView(request, response, "Email isn't valid", email);
+            viewAttributes.put("error", "Email isn't valid");
+            passErrorToView(request, response, viewAttributes);
             return;
         }
         if(!Security.isPasswordValid(password)) {
-            passErrorToView(request, response, "Password isn't valid", email);
+            viewAttributes.put("error", "Password isn't valid");
+            passErrorToView(request, response, viewAttributes);
             return;
         }
         User user = UserDAO.findUserByEmail(email);
         if(user == null) {
-            passErrorToView(request, response, "User with this email wasn't found", email);
+            viewAttributes.put("error", "User with this email wasn't found");
+            passErrorToView(request, response, viewAttributes);
             return;
         }
         try {
             if(!Security.isPasswordCorrect(password, user.getPassword())) {
-                passErrorToView(request, response, "Wrong password", email);
+                viewAttributes.put("error", "Wrong password");
+                passErrorToView(request, response, viewAttributes);
                 return;
             }
         } catch (Exception e) {
-            passErrorToView(request, response, "Wrong password", email);
+            viewAttributes.put("error", "Wrong password");
+            passErrorToView(request, response, viewAttributes);
             return;
         }
 
-        HttpSession session = request.getSession(true);
+        session = request.getSession(true);
         session.setAttribute("email", user.getEmail());
+        session.setAttribute("rolename", user.getRoleName());
+        session.setAttribute("user", user);
+        if("".equals(remember))
+            session.setMaxInactiveInterval(1800); // 30 minutes
+        else
+            session.setMaxInactiveInterval(604800); // 7 days
         response.sendRedirect(CATALOG_PATH);
     }
 
-    private void passErrorToView(HttpServletRequest request, HttpServletResponse response, String error, String email) throws ServletException, IOException {
-        request.setAttribute("email", email);
-        request.setAttribute("error", error);
+    private void passErrorToView(HttpServletRequest request, HttpServletResponse response, Map<String, String> viewAttributes) throws ServletException, IOException {
+        for(Map.Entry<String, String> entry : viewAttributes.entrySet())
+            request.setAttribute(entry.getKey(), entry.getValue());
         RequestDispatcher disp = request.getRequestDispatcher(LOGIN_VIEW_PATH);
         disp.forward(request, response);
     }
 
-    public void destroy() {
-    }
 }

@@ -1,5 +1,16 @@
 body {font-family: Arial, Helvetica, sans-serif;}
-form {border: 3px solid #f1f1f1;}
+
+form {
+    border: 3px solid #f1f1f1;
+}
+
+.outer {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    margin: -150px 0 0 -150px;
+    width:300px;
+    height:300px;}
 
 input[type=text], input[type=password] {
     width: 100%;
@@ -45,8 +56,12 @@ img.avatar {
 }
 
 span.psw {
-    float: right;
-    padding-top: 16px;
+float: right;
+padding-top: 16px;
+}
+
+h2 {
+    text-align: center;
 }
 
 /* Change styles for span and cancel button on extra small screens */
