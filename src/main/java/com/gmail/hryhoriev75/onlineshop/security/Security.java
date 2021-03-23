@@ -7,8 +7,13 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
+import java.util.regex.Pattern;
 
 public class Security {
+
+    private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$");
 
     private static final int ITERATIONS = 200000;
     private static final int KEY_LENGTH = 512;
@@ -45,4 +50,7 @@ public class Security {
         return password != null && password.length() >= 8 && password.length() <= 64;
     }
 
+    public static boolean isPhoneValid(String phoneNumber) {
+        return PHONE_NUMBER_PATTERN.matcher(phoneNumber).matches();
+    }
 }

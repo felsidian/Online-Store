@@ -56,10 +56,14 @@ public class UserDAO {
         User user = null;
         try {
             if (rs.next()) {
-                user = User.builder().id(rs.getLong(FIELD_ID)).name(rs.getString(FIELD_NAME)).
-                        email(rs.getString(FIELD_EMAIl)).password(rs.getString(FIELD_PASSWORD)).
-                        phoneNumber(rs.getString(FIELD_PHONE_NUMBER)).roleName(rs.getString(FIELD_ROLE_NAME))
-                        .blocked(rs.getBoolean(FIELD_BLOCKED)).build();
+                user = new User();
+                user.setId(rs.getLong(FIELD_ID));
+                user.setName(rs.getString(FIELD_NAME));
+                user.setEmail(rs.getString(FIELD_EMAIl));
+                user.setPassword(rs.getString(FIELD_PASSWORD));
+                user.setPhoneNumber(rs.getString(FIELD_PHONE_NUMBER));
+                user.setRoleName(rs.getString(FIELD_ROLE_NAME));
+                user.setBlocked(rs.getBoolean(FIELD_BLOCKED));
             }
         } catch (SQLException e) {
             e.printStackTrace();

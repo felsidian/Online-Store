@@ -1,4 +1,4 @@
-package com.gmail.hryhoriev75.onlineshop.controller;
+package com.gmail.hryhoriev75.onlineshop.web.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
