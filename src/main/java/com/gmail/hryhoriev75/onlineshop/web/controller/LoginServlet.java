@@ -3,6 +3,7 @@ package com.gmail.hryhoriev75.onlineshop.web.controller;
 import com.gmail.hryhoriev75.onlineshop.model.UserDAO;
 import com.gmail.hryhoriev75.onlineshop.model.entity.User;
 import com.gmail.hryhoriev75.onlineshop.security.Security;
+import com.gmail.hryhoriev75.onlineshop.web.Path;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,33 +16,41 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(name = "LoginServlet", value = "/login")
+import static com.gmail.hryhoriev75.onlineshop.web.Path.LOGIN_PATH;
+
+@WebServlet(name = "LoginServlet", value = LOGIN_PATH + "/*")
 public class LoginServlet extends HttpServlet {
 
     private static final String LOGIN_VIEW_PATH = "/WEB-INF/jsp/login.jsp";
-    private static final String CATALOG_PATH = "/";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
+        if(request.getPathInfo() != null) {
+            // if we somehow ended up with /login/*, redirection to /login
+            response.sendRedirect(Path.LOGIN_PATH);
+            return;
+        }
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             // if we somehow opened /login page while being already logged in, we just do redirect to catalog (/)
-            response.sendRedirect(CATALOG_PATH);
+            response.sendRedirect(Path.CATALOG_PATH);
         } else {
             RequestDispatcher disp = request.getRequestDispatcher(LOGIN_VIEW_PATH);
             disp.forward(request, response);
         }
-
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        if(request.getPathInfo() != null) {
+            // if we somehow ended up with /login/*, redirection to /login
+            response.sendRedirect(Path.LOGIN_PATH);
+            return;
+        }
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             // if we somehow opened /login page while being already logged in, we just do redirect to catalog (/)
-            response.sendRedirect(CATALOG_PATH);
+            response.sendRedirect(Path.CATALOG_PATH);
             return;
         }
 
@@ -66,6 +75,9 @@ public class LoginServlet extends HttpServlet {
             passErrorToView(request, response, viewAttributes);
             return;
         }
+
+        // all request parameters are valid
+        // trying to identify and authenticate user
         User user = UserDAO.findUserByEmail(email);
         if(user == null) {
             viewAttributes.put("error", "User with this email wasn't found");
@@ -93,11 +105,7 @@ public class LoginServlet extends HttpServlet {
             session.setMaxInactiveInterval(1800); // 30 minutes
         else
             session.setMaxInactiveInterval(604800); // 7 days
-        response.sendRedirect(CATALOG_PATH);
-    }
-
-    private void redirect(HttpServletResponse response, String path) throws IOException {
-        response.sendRedirect(path);
+        response.sendRedirect(Path.CATALOG_PATH);
     }
 
     private void passErrorToView(HttpServletRequest request, HttpServletResponse response, Map<String, String> viewAttributes) throws ServletException, IOException {

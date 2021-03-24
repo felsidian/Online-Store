@@ -11,18 +11,19 @@ import java.sql.SQLException;
 public class UserDAO {
 
     private static final String SQL_FIND_USER_BY_ID =
-            "SELECT user.*, role.name AS role_name FROM user LEFT JOIN role ON role_id=role.id WHERE user.id=?";
+            "SELECT user.*,role.name AS role_name FROM user LEFT JOIN role ON role_id=role.id WHERE user.id=?";
     private static final String SQL_FIND_USER_BY_EMAIL =
-            "SELECT user.*, role.name AS role_name FROM user LEFT JOIN role ON role_id=role.id WHERE user.email=?";
+            "SELECT user.*,role.name AS role_name FROM user LEFT JOIN role ON role_id=role.id WHERE user.email=?";
+    private static final String SQL_ADD_USER =
+            "INSERT INTO user(email,password,name,phone_number,locale,role_id,blocked)VALUES(?,?,?,?,?,(SELECT id FROM role WHERE name=? LIMIT 1),?)";
+
     private static final String FIELD_ID = "id";
     private static final String FIELD_NAME = "name";
     private static final String FIELD_EMAIl = "email";
     private static final String FIELD_PASSWORD = "password";
-    private static final String FIELD_SALT = "salt";
     private static final String FIELD_PHONE_NUMBER = "phone_number";
     private static final String FIELD_BLOCKED = "blocked";
     private static final String FIELD_ROLE_NAME = "role_name";
-
 
     public static User findUserById(long id) {
         User user = null;
@@ -50,6 +51,29 @@ public class UserDAO {
             ex.printStackTrace();
         }
         return user;
+    }
+
+    public static boolean addUser(String email, String password, String name, String phoneNumber, String locale) {
+        boolean result = false;
+        try (Connection con = DBHelper.getInstance().getConnection();
+             PreparedStatement pst = con.prepareStatement(SQL_ADD_USER)) {
+            //email,password,name,phone_number,locale,role_id,blocked
+            pst.setString(1, email);
+            pst.setString(2, password);
+            pst.setString(3, name);
+            pst.setString(4, phoneNumber);
+            pst.setString(5, locale);
+            pst.setString(6, "user");
+            pst.setBoolean(7, false);
+            try{
+                result = pst.executeUpdate() > 0;
+            } finally {
+                pst.close();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     private static User mapResultSet(ResultSet rs) {

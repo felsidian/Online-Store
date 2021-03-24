@@ -7,11 +7,28 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-//@WebFilter("/*")
+@WebFilter("/*")
 public class LoginFilter implements Filter {
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws ServletException, IOException {
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
+
+        HttpServletRequest req = (HttpServletRequest) request;
+        System.out.println("===========================================");
+        System.out.println("getContextPath = " + req.getContextPath());
+        System.out.println("getServletPath = " + req.getServletPath());
+        System.out.println("getPathTranslated = " + req.getPathTranslated());
+        System.out.println("getPathInfo = " + req.getPathInfo());
+        System.out.println("getRequestURI = " + req.getRequestURI());
+        System.out.println("getRequestURL = " + req.getRequestURL());
+        System.out.println("===========================================");
+        chain.doFilter(request, response);
+
         // Example implementation
 //        HttpServletRequest request = (HttpServletRequest) req;
 //        HttpServletResponse response = (HttpServletResponse) res;
@@ -29,4 +46,5 @@ public class LoginFilter implements Filter {
     }
 
 }
+
 

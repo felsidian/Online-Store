@@ -43,7 +43,7 @@ public class Security {
     }
 
     public static boolean isEmailValid(final String email)  {
-        return email != null && EmailValidator.getInstance().isValid(email);
+        return email != null && EmailValidator.getInstance().isValid(email.trim());
     }
 
     public static boolean isPasswordValid(final String password)  {
@@ -51,6 +51,7 @@ public class Security {
     }
 
     public static boolean isPhoneValid(String phoneNumber) {
-        return PHONE_NUMBER_PATTERN.matcher(phoneNumber).matches();
+        //return PHONE_NUMBER_PATTERN.matcher(phoneNumber).matches();
+        return phoneNumber != null && phoneNumber.trim().length() > 0;
     }
 }

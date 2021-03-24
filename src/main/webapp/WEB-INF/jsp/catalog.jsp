@@ -11,7 +11,7 @@
         roleName = user.getRoleName();
 %>
 
-<fmt:setLocale value="ua"/>
+<fmt:setLocale value="en"/>
 <fmt:setBundle basename="messages"/>
 
 
@@ -27,7 +27,7 @@
             <p>Hello, <c:out value="${user.email}"/> <button type="button" onclick="window.location.href='/logout';">Logout</button></p>
         <% } else {%>
             <button type="button" onclick="window.location.href='/login';">Log in</button>
-            <button type="button">Sing up</button>
+            <button type="button" onclick="window.location.href='/signup';">Sign up</button>
         <% } %>
     </div>
     <h1 style="padding: 24px 30px">Product catalog</h1>

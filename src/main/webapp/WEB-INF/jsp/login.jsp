@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<fmt:setLocale value="ua"/>
+<fmt:setLocale value="en"/>
 <fmt:setBundle basename="messages"/>
 <%--<fmt:message key="title.singin" />--%>
 
@@ -17,12 +17,12 @@
 
 <body>
     <div class="outer">
-    <h2>Log In</h2>
+    <h2><fmt:message key="title.login"/></h2>
 
         <form action="login" method="post">
             <div class="container">
                 <label for="email"><b>Email</b></label>
-                <input type="text" placeholder="Enter Username" id="name" name="email" required value="<c:out value="${email}" default="" />">
+                <input type="text" placeholder="Enter Username" id="email" name="email" required value="<c:out value="${email}" default="" />">
 
                 <label for="password"><b>Password</b></label>
                 <input type="password" placeholder="Enter Password" id="password" name="password" required>

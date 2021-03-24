@@ -3,6 +3,7 @@ package com.gmail.hryhoriev75.onlineshop.web.controller;
 import com.gmail.hryhoriev75.onlineshop.model.UserDAO;
 import com.gmail.hryhoriev75.onlineshop.model.entity.User;
 import com.gmail.hryhoriev75.onlineshop.security.Security;
+import com.gmail.hryhoriev75.onlineshop.web.Path;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,40 +16,48 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(name = "SignupServlet", value = "/signup")
+@WebServlet(name = "SignupServlet", value = Path.SIGNUP_PATH + "/*")
 public class SignupServlet extends HttpServlet {
 
-    private static final String LOGIN_VIEW_PATH = "/WEB-INF/jsp/signup.jsp";
-    private static final String CATALOG_PATH = "/";
-    private static final String LOGIN_PATH = "/login";
+    private static final String SIGNUP_VIEW_PATH = "/WEB-INF/jsp/signup.jsp";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        if(request.getPathInfo() != null) {
+            // if we somehow ended up with /signup/*, redirection to /signup
+            response.sendRedirect(Path.SIGNUP_PATH);
+            return;
+        }
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             // if we somehow opened /signup page while being already logged in, we just do redirect to catalog (/)
-            response.sendRedirect(CATALOG_PATH);
+            response.sendRedirect(Path.CATALOG_PATH);
         } else {
-            RequestDispatcher disp = request.getRequestDispatcher(LOGIN_VIEW_PATH);
+            RequestDispatcher disp = request.getRequestDispatcher(SIGNUP_VIEW_PATH);
             disp.forward(request, response);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if(request.getPathInfo() != null) {
+            // if we somehow ended up with /signup/*, redirection to /signup
+            response.sendRedirect(Path.SIGNUP_PATH);
+            return;
+        }
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             // if we somehow opened /signup page while being already logged in, we just do redirect to catalog (/)
-            response.sendRedirect(CATALOG_PATH);
+            response.sendRedirect(Path.CATALOG_PATH);
             return;
         }
 
         // continue to perform signup
-        // retrieving parameters from login form
+        // retrieving parameters from signup form
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String name = request.getParameter("password");
-        String phoneNumber = request.getParameter("password");
+        String name = request.getParameter("name");
+        String phoneNumber = request.getParameter("phoneNumber");
 
 
         // filling map with parameters which will be passed to the view
@@ -72,22 +81,38 @@ public class SignupServlet extends HttpServlet {
             passErrorToView(request, response, viewAttributes);
             return;
         }
-        if(phoneNumber != null && !Security.isPhoneValid(phoneNumber)) {
+        if(phoneNumber != null && phoneNumber.length() > 0 && !Security.isPhoneValid(phoneNumber)) {
             viewAttributes.put("error", "Phone number isn't valid");
             passErrorToView(request, response, viewAttributes);
             return;
         }
-        User user = UserDAO.findUserByEmail(email);
-        if(user != null) {
+        // all request parameters are valid
+
+        if(UserDAO.findUserByEmail(email) != null) {
             viewAttributes.put("error", "User with this email already exists");
             passErrorToView(request, response, viewAttributes);
             return;
         }
 
-        // if we are here then signup information was correct
-        // lets create user order in DB and let him login
-        // TODO create user order in DB
-        response.sendRedirect(LOGIN_PATH);
+        // lets create user in DB and make him logged in
+        boolean userAdded = false;
+        try {
+            UserDAO.addUser(email, Security.hashPassword(password), name, phoneNumber, "uk");
+            userAdded = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(!userAdded) {
+            viewAttributes.put("error", "Something went wrong. Please try again");
+            passErrorToView(request, response, viewAttributes);
+        } else {
+            User user = UserDAO.findUserByEmail(email);
+            // lets put him into session and redirect to catalog (/)
+            session = request.getSession(true);
+            session.setAttribute("user", user);
+            session.setMaxInactiveInterval(86400); // 1 day
+            response.sendRedirect(Path.CATALOG_PATH);
+        }
     }
 
     private void redirect(HttpServletResponse response, String path) throws IOException {
@@ -97,7 +122,7 @@ public class SignupServlet extends HttpServlet {
     private void passErrorToView(HttpServletRequest request, HttpServletResponse response, Map<String, String> viewAttributes) throws ServletException, IOException {
         for(Map.Entry<String, String> entry : viewAttributes.entrySet())
             request.setAttribute(entry.getKey(), entry.getValue());
-        RequestDispatcher disp = request.getRequestDispatcher(LOGIN_VIEW_PATH);
+        RequestDispatcher disp = request.getRequestDispatcher(SIGNUP_VIEW_PATH);
         disp.forward(request, response);
     }
 

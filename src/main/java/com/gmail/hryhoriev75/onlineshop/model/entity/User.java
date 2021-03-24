@@ -65,4 +65,11 @@ public class User {
     public void setBlocked(boolean blocked) {
         this.blocked = blocked;
     }
+
+    enum Role {
+        ADMIN, USER;
+        public String getName() {
+            return name().toLowerCase();
+        }
+    }
 }
