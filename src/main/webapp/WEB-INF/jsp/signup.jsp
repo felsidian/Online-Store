@@ -12,12 +12,12 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style/login.css">
-    <title><fmt:message key="title.singup"/></title>
+    <title><fmt:message key="title.signup"/></title>
 </head>
 
 <body>
 <div class="outer">
-    <h2><fmt:message key="title.singup"/></h2>
+    <h2><fmt:message key="title.signup"/></h2>
 
     <form action="signup" method="post">
         <div class="container">
@@ -35,7 +35,7 @@
 
             <div style="color:red; text-align: center;"><c:out value="${error}" /></div>
 
-            <button type="submit">Sign in</button>
+            <button type="submit">Sign up</button>
         </div>
 
         <div class="container" style="background-color:#f1f1f1">

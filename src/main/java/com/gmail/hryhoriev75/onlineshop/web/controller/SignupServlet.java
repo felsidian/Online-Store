@@ -76,12 +76,12 @@ public class SignupServlet extends HttpServlet {
             passErrorToView(request, response, viewAttributes);
             return;
         }
-        if(name == null || name.length() < 1) {
+        if(name == null || name.isBlank()) {
             viewAttributes.put("error", "Name isn't valid");
             passErrorToView(request, response, viewAttributes);
             return;
         }
-        if(phoneNumber != null && phoneNumber.length() > 0 && !Security.isPhoneValid(phoneNumber)) {
+        if(phoneNumber != null && !Security.isPhoneValid(phoneNumber)) {
             viewAttributes.put("error", "Phone number isn't valid");
             passErrorToView(request, response, viewAttributes);
             return;

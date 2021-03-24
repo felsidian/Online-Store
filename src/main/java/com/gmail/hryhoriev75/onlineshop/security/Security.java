@@ -52,6 +52,6 @@ public class Security {
 
     public static boolean isPhoneValid(String phoneNumber) {
         //return PHONE_NUMBER_PATTERN.matcher(phoneNumber).matches();
-        return phoneNumber != null && phoneNumber.trim().length() > 0;
+        return phoneNumber != null && !phoneNumber.isBlank();
     }
 }
