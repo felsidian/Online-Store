@@ -1,22 +1,16 @@
 package com.gmail.hryhoriev75.onlineshop.model.entity;
 
-public class User {
+import java.util.List;
+import java.util.Objects;
 
-    long id;
-    String name;
-    String email;
-    String password;
-    String phoneNumber;
-    String roleName; // "user" or "admin"
-    boolean blocked;
+public class User extends Entity {
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+    private String name;
+    private String email;
+    private String password;
+    private String phoneNumber;
+    private Role role;
+    private boolean blocked;
 
     public String getName() {
         return name;
@@ -50,12 +44,12 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public boolean isBlocked() {
@@ -66,9 +60,18 @@ public class User {
         this.blocked = blocked;
     }
 
-    enum Role {
+    public enum Role {
         ADMIN, USER;
-        public String getName() {
+
+        public boolean isUser() {
+            return this == USER;
+        }
+        public boolean isAdmin() {
+            return this == ADMIN;
+        }
+
+        @Override
+        public String toString() {
             return name().toLowerCase();
         }
     }

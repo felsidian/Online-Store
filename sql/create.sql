@@ -33,15 +33,16 @@ CREATE TABLE `user` (
 
 CREATE TABLE `category` (
                             id int NOT NULL AUTO_INCREMENT,
-                            name varchar(50) NOT NULL,
-                            description varchar(1000),
+                            name varchar(255) NOT NULL,
+                            description TEXT,
                             PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `product` (
                            id int NOT NULL AUTO_INCREMENT,
-                           name varchar(50) NOT NULL,
-                           description varchar(1000),
+                           name varchar(255) NOT NULL,
+                           brand varchar(255) NOT NULL,
+                           description TEXT,
                            create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                            price decimal(10, 2) NOT NULL,
                            image_url VARCHAR(2083),

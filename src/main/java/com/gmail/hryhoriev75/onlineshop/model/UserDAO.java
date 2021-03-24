@@ -86,7 +86,7 @@ public class UserDAO {
                 user.setEmail(rs.getString(FIELD_EMAIl));
                 user.setPassword(rs.getString(FIELD_PASSWORD));
                 user.setPhoneNumber(rs.getString(FIELD_PHONE_NUMBER));
-                user.setRoleName(rs.getString(FIELD_ROLE_NAME));
+                user.setRole(User.Role.valueOf(rs.getString(FIELD_ROLE_NAME).toUpperCase()));
                 user.setBlocked(rs.getBoolean(FIELD_BLOCKED));
             }
         } catch (SQLException e) {
