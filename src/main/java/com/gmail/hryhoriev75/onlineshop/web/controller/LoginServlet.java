@@ -42,11 +42,6 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(request.getPathInfo() != null) {
-            // if we somehow ended up with /login/*, redirection to /login
-            response.sendRedirect(Path.LOGIN_PATH);
-            return;
-        }
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             // if we somehow opened /login page while being already logged in, we just do redirect to catalog (/)

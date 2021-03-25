@@ -45,7 +45,8 @@ public class UserDAO {
              PreparedStatement pst = con.prepareStatement(SQL_FIND_USER_BY_EMAIL)) {
             pst.setString(1, email);
             try (ResultSet rs = pst.executeQuery()) {
-                user = mapResultSet(rs);
+                if(rs.next())
+                    user = mapResultSet(rs);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -79,7 +80,6 @@ public class UserDAO {
     private static User mapResultSet(ResultSet rs) {
         User user = null;
         try {
-            if (rs.next()) {
                 user = new User();
                 user.setId(rs.getLong(FIELD_ID));
                 user.setName(rs.getString(FIELD_NAME));
@@ -88,7 +88,6 @@ public class UserDAO {
                 user.setPhoneNumber(rs.getString(FIELD_PHONE_NUMBER));
                 user.setRole(User.Role.valueOf(rs.getString(FIELD_ROLE_NAME).toUpperCase()));
                 user.setBlocked(rs.getBoolean(FIELD_BLOCKED));
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
