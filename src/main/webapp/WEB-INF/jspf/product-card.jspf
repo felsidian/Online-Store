@@ -1,0 +1,12 @@
+<div class="card h-100">
+    <c:set var="productLink" value="${Path.PRODUCT_PATH += '?id=' += product.id}"/>
+    <a href="<c:out value="${productLink}"/>"><img class="card-img-top img-prev p-3" src="<c:out value="${product.imageUrl}"/>" style="height: 200px; object-fit: scale-down;" alt=""></a>
+    <div class="card-body">
+        <h5 class="card-title">
+            <a href="<c:out value="${productLink}"/>"><c:out value="${product.name}"/></a>
+        </h5>
+    </div>
+    <div class="card-footer">
+        <h4 class="d-inline"><c:out value="${product.price}"/> грн</h4>
+        <button type="button" class="btn btn-info float-end">Add to cart</button></div>
+</div>

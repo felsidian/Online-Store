@@ -6,7 +6,7 @@
     <%@include file="/WEB-INF/jspf/head.jspf" %>
 </head>
 
-<body>
+<body class="d-flex flex-column h-100">
 
 <%@include file="/WEB-INF/jspf/navbar.jspf" %>
 

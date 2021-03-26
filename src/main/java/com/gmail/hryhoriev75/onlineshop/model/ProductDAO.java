@@ -19,8 +19,7 @@ public class ProductDAO {
     private static final String SQL_FIND_PRODUCT_BY_ID = SQL_GET_ALL_PRODUCTS + " WHERE product.id=?";
     private static final String SQL_GET_ALL_PRODUCTS_BY_CATEGORY = "SELECT * FROM product WHERE category_id=?";
     private static final String SQL_GET_ALL_CATEGORIES = "SELECT * FROM category";
-    private static final String SQL_ADD_PRODUCT =
-            "INSERT INTO user(email,password,name,phone_number,locale,role_id,blocked)VALUES(?,?,?,?,?,(SELECT id FROM role WHERE name=? LIMIT 1),?)";
+    private static final String SQL_FIND_CATEGORY_BY_ID ="SELECT * FROM category WHERE id=?";
 
     private static final String TABLE_CATEGORY = "category";
 
@@ -138,4 +137,19 @@ public class ProductDAO {
         return category;
     }
 
+    public static Category findCategoryById(long id) {
+        Category category = null;
+        try (Connection con = DBHelper.getInstance().getConnection();
+             PreparedStatement pst = con.prepareStatement(SQL_FIND_CATEGORY_BY_ID)) {
+            pst.setLong(1, id);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    category = mapCategory(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return category;
+    }
 }
