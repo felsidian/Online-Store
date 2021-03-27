@@ -24,6 +24,7 @@ public class CatalogServlet extends HttpServlet {
         List<Category> categories = ProductDAO.getAllCategories();
         request.setAttribute("categories", categories);
 
+        // get 6 most popular products
         List<Product> products = ProductDAO.getProducts(6);
         request.setAttribute("products", products);
 

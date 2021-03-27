@@ -70,4 +70,8 @@ public class Product extends Entity {
         this.category = category;
     }
 
+    @Override
+    public String toString() {
+        return "asdaqweqw11";
+    }
 }

@@ -6,24 +6,26 @@
     <%@include file="/WEB-INF/jspf/head.jspf" %>
 </head>
 
-<body class="d-flex flex-column h-100">
+<body class="d-flex flex-column h-100" onload="onPageLoad()">
 
 <%@include file="/WEB-INF/jspf/navbar.jspf" %>
 
 <!-- Page Content -->
 <div class="container">
     <div class="col-lg-3">
-        <nav aria-label="breadcrumb" class="my-4">
+        <nav aria-label="breadcrumb" class="mt-3">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page"><c:out value="${requestScope.category.name}"/></li>
             </ol>
         </nav>
     </div>
-    <h1><c:out value="${requestScope.category.name}"/></h1>
+    <h1 class="mb-3"><c:out value="${requestScope.category.name}"/></h1>
     <div class="row">
         <div class="col-lg-3">
         </div>
+
+        <!-- SORT -->
         <div class="col">
             <div class="dropdown">
                 <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -36,11 +38,17 @@
                 </ul>
             </div>
         </div>
+        <!-- SORT -->
+
+        <!-- PAGINATION -->
         <div class="col">
             <nav class="float-end">
                 <ul class="pagination">
                     <li class="page-item disabled">
                         <a class="page-link" href="#">Previous</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <p class="page-link disabled" >1</p>
                     </li>
                     <li class="page-item">
                         <a class="page-link" href="#">Next</a>
@@ -48,38 +56,45 @@
                 </ul>
             </nav>
         </div>
+        <!-- PAGINATION -->
     </div>
     <div class="row">
-
         <div class="w-100"></div>
+
+        <!-- FILTERS-->
         <div class="col-lg-3">
             <div class="list-group">
                 <div class="input-group mb-3">
-                    <span class="input-group-text">Цiна вiд</span>
+                    <span class="input-group-text">Price from</span>
                     <input type="text" class="form-control" aria-label="Цiна вiд">
-                    <span class="input-group-text">до</span>
+                    <span class="input-group-text">to</span>
                     <input type="text" class="form-control" aria-label="до">
+                    <span class="input-group-text">hrn</span>
                 </div>
-                <div class="list-group-item">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        Source of power
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked="">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Battery
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Grid
+                            </label>
+                        </div>
                     </div>
                 </div>
-                <a href="#" class="list-group-item">Category 2</a>
-                <button type="submit" class="btn btn-secondary my-3">застосувати</button>
+                <button type="submit" class="btn btn-secondary my-3">Apply</button>
             </div>
 
         </div>
-        <!-- /.col-lg-3 -->
+        <!-- FILTERS -->
 
         <div class="col-lg-9">
 

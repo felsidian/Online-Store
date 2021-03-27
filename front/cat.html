@@ -4,7 +4,7 @@
 
 <head>
     <meta name="description" content="">
-    <title>Leet Tools</title>
+    <title>Шурупокрути</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="">
@@ -15,59 +15,154 @@
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 
-    <!-- Custom styles for this template -->
-    <link href="OnlineStore/front/css/shop-homepage.css" rel="stylesheet">
+
 
 </head>
 
-<body class="d-flex flex-column h-100">
+<body class="d-flex flex-column h-100" style="padding-top: 56px;">
 
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container">
         <a class="navbar-brand" href="#">Leet tools</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+
+        <button type="button" class="btn btn-primary position-relative" data-bs-toggle="modal" data-bs-target="#cartModal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
+                <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"></path>
+            </svg>
+            Cart<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">9</span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Item</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Item</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Item</a>
-                </li>
-            </ul>
-
-
-            <div class="text-end">
-                <a class="btn btn-outline-light me-2" href="login" role="button">Login</a>
-                <a class="btn btn-warning me-2" href="signup" role="button">Sign up</a>
-            </div>
 
 
 
+        <div >
+            <a class="btn btn-outline-light me-2" href="login" role="button">Login</a>
+            <a class="btn btn-warning me-2" href="signup" role="button">Sign up</a>
         </div>
+
+
+
+
     </div>
 </nav>
 
+<!-- Cart modal -->
+<div class="modal fade" id="cartModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cartModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalTitle">Cart</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+
+                    <!--ITEM-->
+                    <li class="list-group-item">
+                        <div class="row d-flex align-items-center">
+                            <div class="col-3">
+                                <img class="card-img-top p-3" src="https://i2.rozetka.ua/goods/10128204/bosch_06039a210b_images_10128204791.jpg" style="height: 100px; object-fit: scale-down;" alt="">
+                            </div>
+                            <div class="col-8">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-7">
+                                        <div class="product-name">
+                                            <a href="#">Дриль-шурупокрут Sturm ID2155DFR</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <input id="quantity" type="number" min="1" max="999" value="1" class="form-control quantity-input">
+                                    </div>
+                                    <div class="col-2">
+                                        <span>$120</span>
+                                    </div>
+                                    <div class="col-1 ">
+                                        <button type="button" class="btn-close float-end" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!--ITEM-->
+                    <!--ITEM-->
+                    <li class="list-group-item">
+                        <div class="row d-flex align-items-center">
+                            <div class="col-3">
+                                <img class="card-img-top p-3" src="https://i2.rozetka.ua/goods/10128204/bosch_06039a210b_images_10128204791.jpg" style="height: 100px; object-fit: scale-down;" alt="">
+                            </div>
+                            <div class="col-8">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-7">
+                                        <div class="product-name">
+                                            <a href="#">Дриль-шурупокрут Sturm ID2155DFR</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <input id="quantity" type="number" min="1" max="999" value="1" class="form-control quantity-input">
+                                    </div>
+                                    <div class="col-2">
+                                        <span>$120</span>
+                                    </div>
+                                    <div class="col-1 ">
+                                        <button type="button" class="btn-close float-end" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!--ITEM-->
+                    <!--ITEM-->
+                    <li class="list-group-item">
+                        <div class="row d-flex align-items-center">
+                            <div class="col-3">
+                                <img class="card-img-top p-3" src="https://i2.rozetka.ua/goods/10128204/bosch_06039a210b_images_10128204791.jpg" style="height: 100px; object-fit: scale-down;" alt="">
+                            </div>
+                            <div class="col-8">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-7">
+                                        <div class="product-name">
+                                            <a href="#">Дриль-шурупокрут Sturm ID2155DFR</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <input id="quantity" type="number" min="1" max="999" value="1" class="form-control quantity-input">
+                                    </div>
+                                    <div class="col-2">
+                                        <span>$120</span>
+                                    </div>
+                                    <div class="col-1 ">
+                                        <button type="button" class="btn-close float-end" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!--ITEM-->
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Make order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Page Content -->
-
 <div class="container">
-
-    <nav aria-label="breadcrumb" class="my-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Шурупокрути</li>
-        </ol>
-    </nav>
-
-    <h1>Шурупокрути</h1>
+    <div class="col-lg-3">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Шурупокрути</li>
+            </ol>
+        </nav>
+    </div>
+    <h1 class="mb-3">Шурупокрути</h1>
     <div class="row">
         <div class="col-lg-3">
         </div>
+
+        <!-- SORT -->
         <div class="col">
             <div class="dropdown">
                 <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -80,11 +175,17 @@
                 </ul>
             </div>
         </div>
+        <!-- SORT -->
+
+        <!-- PAGINATION -->
         <div class="col">
             <nav class="float-end">
                 <ul class="pagination">
                     <li class="page-item disabled">
                         <a class="page-link" href="#">Previous</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <p class="page-link disabled" >1</p>
                     </li>
                     <li class="page-item">
                         <a class="page-link" href="#">Next</a>
@@ -92,38 +193,45 @@
                 </ul>
             </nav>
         </div>
+        <!-- PAGINATION -->
     </div>
     <div class="row">
-
         <div class="w-100"></div>
+
+        <!-- FILTERS-->
         <div class="col-lg-3">
             <div class="list-group">
                 <div class="input-group mb-3">
-                    <span class="input-group-text">Цiна вiд</span>
+                    <span class="input-group-text">Price from</span>
                     <input type="text" class="form-control" aria-label="Цiна вiд">
-                    <span class="input-group-text">до</span>
+                    <span class="input-group-text">to</span>
                     <input type="text" class="form-control" aria-label="до">
+                    <span class="input-group-text">hrn</span>
                 </div>
-                <div class="list-group-item">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Default checkbox
-                        </label>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        Source of power
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked="">
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Checked checkbox
-                        </label>
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked="">
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Battery
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Grid
+                            </label>
+                        </div>
                     </div>
                 </div>
-                <a href="#" class="list-group-item">Category 2</a>
-                <button type="submit" class="btn btn-secondary my-3">застосувати</button>
+                <button type="submit" class="btn btn-secondary my-3">Apply</button>
             </div>
 
         </div>
-        <!-- /.col-lg-3 -->
+        <!-- FILTERS -->
 
         <div class="col-lg-9">
 
@@ -132,36 +240,78 @@
 
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card h-100">
-                        <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+
+                        <a href="/product?id=16"><img class="card-img-top img-prev p-3" src="https://i2.rozetka.ua/goods/10128204/bosch_06039a210b_images_10128204791.jpg" style="height: 200px; object-fit: scale-down;" alt=""></a>
                         <div class="card-body">
                             <h5 class="card-title">
                                 <a href="/product?id=16">Акумуляторний дриль-шурупокрут Bosch EasyDrill 1200 2 акумулятори</a>
                             </h5>
-                            <h4>2599.00 грн</h4>
-                            <!--<p class="card-text">Lorem </p>-->
                         </div>
                         <div class="card-footer">
-                            <small class="text-muted">Купити</small>
-                        </div>
+                            <h4 class="d-inline">2599.00 грн</h4>
+                            <button type="button" class="btn btn-info float-end">Add to cart</button></div>
                     </div>
                 </div>
 
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card h-100">
-                        <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+
+                        <a href="/product?id=17"><img class="card-img-top img-prev p-3" src="https://i2.rozetka.ua/goods/15289289/sturm_id2155dfr_images_15289289709.jpg" style="height: 200px; object-fit: scale-down;" alt=""></a>
                         <div class="card-body">
                             <h5 class="card-title">
                                 <a href="/product?id=17">Дриль-шурупокрут Sturm ID2155DFR</a>
                             </h5>
-                            <h4>1150.00 грн</h4>
-                            <!--<p class="card-text">Lorem </p>-->
                         </div>
                         <div class="card-footer">
-                            <small class="text-muted">Купити</small>
-                        </div>
+                            <h4 class="d-inline">1150.00 грн</h4>
+                            <button type="button" class="btn btn-info float-end">Add to cart</button></div>
                     </div>
                 </div>
 
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+
+                        <a href="/product?id=18"><img class="card-img-top img-prev p-3" src="https://i2.rozetka.ua/goods/14530742/makita_df333dwye_images_14530742328.jpg" style="height: 200px; object-fit: scale-down;" alt=""></a>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="/product?id=18">Акумуляторний дриль-шурупокрут Makita DF333DWYE</a>
+                            </h5>
+                        </div>
+                        <div class="card-footer">
+                            <h4 class="d-inline">2815.00 грн</h4>
+                            <button type="button" class="btn btn-info float-end">Add to cart</button></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+
+                        <a href="/product?id=19"><img class="card-img-top img-prev p-3" src="https://i2.rozetka.ua/goods/16659090/xiaomi_zuhause_4129_images_16659090883.jpg" style="height: 200px; object-fit: scale-down;" alt=""></a>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="/product?id=19">Електрична викрутка Xiaomi Wiha Zu Hause Electric Screwdriver + 8 насадок</a>
+                            </h5>
+                        </div>
+                        <div class="card-footer">
+                            <h4 class="d-inline">1099.00 грн</h4>
+                            <button type="button" class="btn btn-info float-end">Add to cart</button></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+
+                        <a href="/product?id=20"><img class="card-img-top img-prev p-3" src="https://i2.rozetka.ua/goods/10017404/bosch_06039a8021_images_10017404339.jpg" style="height: 200px; object-fit: scale-down;" alt=""></a>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="/product?id=20">Акумуляторна викрутка Bosch IXO IV Medium</a>
+                            </h5>
+                        </div>
+                        <div class="card-footer">
+                            <h4 class="d-inline">2599.00 грн</h4>
+                            <button type="button" class="btn btn-info float-end">Add to cart</button></div>
+                    </div>
+                </div>
 
 
 
@@ -175,11 +325,10 @@
     <!-- /.row -->
 
 </div>
-
 <!-- /.container -->
 
-<!-- Footer -->
-<footer class="footer mt-auto py-3 bg-dark  text-center">
+
+<footer class="footer mt-auto py-3 bg-dark text-center">
     <div class="container">
         <span class="text-center text-muted">Copyright © Leet Tools 2021</span>
     </div>
@@ -187,9 +336,6 @@
 
 <!-- Bootstrap core JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-
-
-
 
 </body>
 

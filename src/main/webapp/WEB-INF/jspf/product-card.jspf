@@ -7,6 +7,7 @@
         </h5>
     </div>
     <div class="card-footer">
-        <h4 class="d-inline"><c:out value="${product.price}"/> грн</h4>
-        <button type="button" class="btn btn-info float-end">Add to cart</button></div>
+        <h5 class="d-inline"><c:out value="${product.price}"/> грн</h5>
+        <c:set var="productString" value="${product.id += ';' += product.name += ';' += product.price}"/>
+        <button type="button" class="btn btn-info float-end add-to-cart" data-pr-info="<c:out value="${productString}"/>">Add to cart</button></div>
 </div>
