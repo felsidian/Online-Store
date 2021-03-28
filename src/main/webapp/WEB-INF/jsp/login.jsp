@@ -1,42 +1,35 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@include file="/WEB-INF/jspf/header.jspf" %>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-<fmt:setLocale value="en"/>
-<fmt:setBundle basename="messages"/>
-<%--<fmt:message key="title.singin" />--%>
-
-<!DOCTYPE html>
-<html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="">
     <link rel="stylesheet" href="css/login.css">
-    <title><fmt:message key="title.login"/></title>
+    <title><fmt:message key="login"/></title>
 </head>
 
 <body>
     <div class="outer">
-    <h2><fmt:message key="title.login"/></h2>
+    <h2><fmt:message key="login"/></h2>
 
         <form action="login" method="post">
             <div class="container">
-                <label for="email"><b>Email</b></label>
-                <input type="text" placeholder="Enter Username" id="email" name="email" required value="<c:out value="${email}" default="" />">
+                <label for="email"><b><fmt:message key="email"/></b></label>
+                <input type="text" placeholder="<fmt:message key="enterEmail"/>" id="email" name="email" required value="<c:out value="${email}" default="" />">
 
-                <label for="password"><b>Password</b></label>
-                <input type="password" placeholder="Enter Password" id="password" name="password" required>
+                <label for="password"><b><fmt:message key="password"/></b></label>
+                <input type="password" placeholder="<fmt:message key="enterPassword"/>" id="password" name="password" required>
 
                 <div style="color:red; text-align: center;"><c:out value="${error}" /></div>
 
-                <button type="submit">Login</button>
+                <button type="submit"><fmt:message key="login"/></button>
                 <label>
-                    <input type="checkbox" name="remember" <c:out value="${remember}" />> Remember me
+                    <input type="checkbox" name="remember" <c:out value="${remember}" />> <fmt:message key="remember"/>
                 </label>
             </div>
 
             <div class="container" style="background-color:#f1f1f1">
-                <button type="button" class="cancelbtn" onclick="window.location.href='/';">Cancel</button>
+                <button type="button" class="cancelbtn" onclick="window.location.href='/';"><fmt:message key="cancel"/></button>
             </div>
         </form>
     </div>

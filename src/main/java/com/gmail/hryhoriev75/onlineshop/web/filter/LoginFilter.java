@@ -6,13 +6,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-@WebFilter("/*")
+//@WebFilter("/*")
 public class LoginFilter implements Filter {
+
+    private List<String> adminPaths = new ArrayList<>();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
+        adminPaths.add("/all-orders");
+        adminPaths.add("/add-product");
     }
 
     @Override

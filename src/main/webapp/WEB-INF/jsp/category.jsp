@@ -15,7 +15,7 @@
     <div class="col-lg-3">
         <nav aria-label="breadcrumb" class="mt-3">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#"><fmt:message key="home"/></a></li>
                 <li class="breadcrumb-item active" aria-current="page"><c:out value="${requestScope.category.name}"/></li>
             </ol>
         </nav>
@@ -29,12 +29,13 @@
         <div class="col">
             <div class="dropdown">
                 <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                    Sort
+                    <fmt:message key="sort"/>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    <li><a class="dropdown-item" href="#"><fmt:message key="cheapFirst"/></a></li>
+                    <li><a class="dropdown-item" href="#"><fmt:message key="expensiveFirst"/></a></li>
+                    <li><a class="dropdown-item" href="#"><fmt:message key="fromA"/></a></li>
+                    <li><a class="dropdown-item" href="#"><fmt:message key="fromZ"/></a></li>
                 </ul>
             </div>
         </div>
@@ -45,13 +46,13 @@
             <nav class="float-end">
                 <ul class="pagination">
                     <li class="page-item disabled">
-                        <a class="page-link" href="#">Previous</a>
+                        <a class="page-link" href="#"><fmt:message key="prev"/></a>
                     </li>
                     <li class="page-item disabled">
                         <p class="page-link disabled" >1</p>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
+                        <a class="page-link" href="#"><fmt:message key="next"/></a>
                     </li>
                 </ul>
             </nav>
@@ -65,13 +66,13 @@
         <div class="col-lg-3">
             <div class="list-group">
                 <div class="input-group mb-3">
-                    <span class="input-group-text">Price from</span>
-                    <input type="text" class="form-control" aria-label="Цiна вiд">
-                    <span class="input-group-text">to</span>
-                    <input type="text" class="form-control" aria-label="до">
-                    <span class="input-group-text">hrn</span>
+                    <span class="input-group-text"><fmt:message key="priceFrom"/></span>
+                    <input type="text" class="form-control" aria-label="<fmt:message key="priceFrom"/>">
+                    <span class="input-group-text"><fmt:message key="to"/></span>
+                    <input type="text" class="form-control" aria-label="<fmt:message key="to"/>">
+                    <span class="input-group-text"><fmt:message key="uah"/></span>
                 </div>
-                <div class="card mb-3">
+                <%--<div class="card mb-3">
                     <div class="card-header">
                         Source of power
                     </div>
@@ -89,8 +90,8 @@
                             </label>
                         </div>
                     </div>
-                </div>
-                <button type="submit" class="btn btn-secondary my-3">Filter</button>
+                </div>--%>
+                <button type="submit" class="btn btn-secondary my-3"><fmt:message key="filter"/></button>
             </div>
 
         </div>

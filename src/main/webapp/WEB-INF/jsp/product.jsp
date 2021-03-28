@@ -2,7 +2,7 @@
 
 <head>
     <meta name="description" content="">
-    <title>Shop Homepage - Start Bootstrap Template</title>
+    <title><c:out value="${requestScope.product.name}"/></title>
     <%@include file="/WEB-INF/jspf/head.jspf" %>
 </head>
 
@@ -14,7 +14,7 @@
 <div class="container">
     <nav aria-label="breadcrumb" class="mt-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#"><fmt:message key="home"/></a></li>
             <li class="breadcrumb-item"><a href="<c:out value="${Path.CATEGORY_PATH += '?id=' += requestScope.product.category.id}"/>"><c:out value="${requestScope.product.category.name}"/></a></li>
             <li class="breadcrumb-item active" aria-current="page"><c:out value="${requestScope.product.name}"/></li>
         </ol>
@@ -32,14 +32,14 @@
                 <div class="card-footer">
                     <h5 class="d-inline"><c:out value="${requestScope.product.price}"/> грн</h5>
                     <c:set var="productString" value="${requestScope.product.id += ';' += requestScope.product.name += ';' += requestScope.product.price}"/>
-                    <button type="button" class="btn btn-info float-end add-to-cart" data-pr-info="<c:out value="${productString}"/>">Add to cart</button></div>
+                    <button type="button" class="btn btn-info float-end add-to-cart" data-pr-info="<c:out value="${productString}"/>"><fmt:message key="addToCart"/></button></div>
             </div>
         </div>
         <div class="col-lg-5 my-4">
             <table class="table table-striped">
                 <tbody>
                     <tr>
-                        <th scope="row">Brand</th>
+                        <th scope="row"><fmt:message key="brand"/></th>
                         <td><c:out value="${requestScope.product.brand}"/></td>
                     </tr>
                 </tbody>

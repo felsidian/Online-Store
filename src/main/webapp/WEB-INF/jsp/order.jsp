@@ -2,7 +2,7 @@
 
 <head>
     <meta name="description" content="">
-    <title>Order</title>
+    <title><fmt:message key="orderN"/><c:out value="${requestScope.order.id}"/></title>
     <%@include file="/WEB-INF/jspf/head.jspf" %>
 </head>
 
@@ -14,16 +14,16 @@
 <div class="container">
     <nav aria-label="breadcrumb" class="mt-3">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="<c:out value="${Path.ORDERS_PATH}"/>">My orders</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Order №<c:out value="${requestScope.order.id}"/></li>
+            <li class="breadcrumb-item"><a href="#"><fmt:message key="home"/></a></li>
+            <li class="breadcrumb-item"><a href="<c:out value="${Path.ORDERS_PATH}"/>"><fmt:message key="myOrders"/></a></li>
+            <li class="breadcrumb-item active" aria-current="page"><fmt:message key="orderN"/><c:out value="${requestScope.order.id}"/></li>
         </ol>
     </nav>
     <div class="row">
         <div class="col">
-            <h4 class="my-4">Order №<c:out value="${requestScope.order.id}"/></h4>
-            <h6 class="my-4">Create date: <c:out value="${requestScope.order.createTime}"/></h6>
-            <h6 class="my-4">Status: <c:out value="${requestScope.order.status}"/></h6>
+            <h4 class="my-4"><fmt:message key="orderN"/><c:out value="${requestScope.order.id}"/></h4>
+            <h6 class="my-4"><fmt:message key="createDate"/>: <c:out value="${requestScope.order.createTime}"/></h6>
+            <h6 class="my-4"><fmt:message key="status"/>: <fmt:message key="${requestScope.order.status}"/></h6>
             <ul class="list-group" id="cart-list">
                 <c:forEach items="${requestScope.orderContent}" var="record">
                     <!--ITEM-->

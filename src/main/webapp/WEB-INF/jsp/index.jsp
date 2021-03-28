@@ -2,7 +2,7 @@
 
 <head>
     <meta name="description" content="">
-    <title>Leet Tools</title>
+    <title><fmt:message key="leet"/></title>
     <%@include file="/WEB-INF/jspf/head.jspf" %>
 </head>
 

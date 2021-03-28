@@ -54,7 +54,7 @@ public class Order extends Entity {
         }
 
         public String getStatus() {
-            return toString();
+            return name().toLowerCase();
         }
     }
 
