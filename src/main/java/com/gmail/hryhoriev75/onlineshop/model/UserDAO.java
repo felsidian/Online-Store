@@ -66,11 +66,8 @@ public class UserDAO {
             pst.setString(5, locale);
             pst.setString(6, "user");
             pst.setBoolean(7, false);
-            try{
-                result = pst.executeUpdate() > 0;
-            } finally {
-                pst.close();
-            }
+
+            result = pst.executeUpdate() > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

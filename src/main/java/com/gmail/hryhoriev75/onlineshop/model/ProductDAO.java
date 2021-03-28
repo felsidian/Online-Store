@@ -48,20 +48,6 @@ public class ProductDAO {
         return product;
     }
 
-    public static List<Product> getAllProducts() {
-        List<Product> products = new ArrayList<>();
-        try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_PRODUCTS_ORDERED);
-             ResultSet rs = pst.executeQuery()) {
-                while (rs.next()) {
-                    products.add(mapProductAndCategory(rs));
-                }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return products;
-    }
-
     public static List<Product> getProducts(long limit) {
         List<Product> products = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
@@ -110,6 +96,22 @@ public class ProductDAO {
         return list;
     }
 
+    public static Category findCategoryById(long id) {
+        Category category = null;
+        try (Connection con = DBHelper.getInstance().getConnection();
+             PreparedStatement pst = con.prepareStatement(SQL_FIND_CATEGORY_BY_ID)) {
+            pst.setLong(1, id);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    category = mapCategory(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return category;
+    }
+
     private static Product mapProductAndCategory(ResultSet rs) throws SQLException {
         Product product = mapProduct(rs);
         Category category = mapCategory(rs);
@@ -137,19 +139,4 @@ public class ProductDAO {
         return category;
     }
 
-    public static Category findCategoryById(long id) {
-        Category category = null;
-        try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement(SQL_FIND_CATEGORY_BY_ID)) {
-            pst.setLong(1, id);
-            try (ResultSet rs = pst.executeQuery()) {
-                if (rs.next()) {
-                    category = mapCategory(rs);
-                }
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return category;
-    }
 }

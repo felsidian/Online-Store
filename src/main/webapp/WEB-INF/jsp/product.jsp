@@ -12,41 +12,36 @@
 
 <!-- Page Content -->
 <div class="container">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="<c:out value="${Path.CATEGORY_PATH += '?id=' += requestScope.product.category.id}"/>"><c:out value="${requestScope.product.category.name}"/></a></li>
+            <li class="breadcrumb-item active" aria-current="page"><c:out value="${requestScope.product.name}"/></li>
+        </ol>
+    </nav>
     <div class="row">
-        <div class="col-lg">
+        <div class="col-lg-7">
             <div class="card my-4">
                 <div class="card-header">
-                    <h3>Product 1</h3>
+                    <h3><c:out value="${requestScope.product.name}"/></h3>
                 </div>
-                <img class="card-img-top" src="http://placehold.it/900x600" alt="Card image cap">
+
                 <div class="card-body">
-                    <div class="row " >
-                        <div class="col-sm">
-                            <h5 class="card-title">1234 грн</h5>
-                        </div>
-                        <div class="col-sm">
-                            <a href="#" class="btn btn-primary float-right">Add to cart</a>
-                        </div>
-                    </div>
+                    <img class="card-img-top img-prev p-3" src="<c:out value="${requestScope.product.imageUrl}"/>" style="height: 400px; object-fit: scale-down;" alt="">
                 </div>
+                <div class="card-footer">
+                    <h5 class="d-inline"><c:out value="${requestScope.product.price}"/> грн</h5>
+                    <c:set var="productString" value="${requestScope.product.id += ';' += requestScope.product.name += ';' += requestScope.product.price}"/>
+                    <button type="button" class="btn btn-info float-end add-to-cart" data-pr-info="<c:out value="${productString}"/>">Add to cart</button></div>
             </div>
         </div>
-        <div class="col-lg">
-            <h4 class="my-4">Характеристики</h4>
+        <div class="col-lg-5 my-4">
             <table class="table table-striped">
                 <tbody>
-                <tr>
-                    <th scope="row">1йцуйцуйцу</th>
-                    <td>Markфывфывфывфы</td>
-                </tr>
-                <tr>
-                    <th scope="row">2йцуйцуйцуйцу</th>
-                    <td>Jacobфывфывфыв</td>
-                </tr>
-                <tr>
-                    <th scope="row">3йцуйцуйцуйцу</th>
-                    <td>Larryфывфывфыв</td>
-                </tr>
+                    <tr>
+                        <th scope="row">Brand</th>
+                        <td><c:out value="${requestScope.product.brand}"/></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -54,12 +49,7 @@
         <div class="col-sm">
             <div class="card">
                 <div class="card-body">
-                    Електролобзик Metabo STEB 65 Quick 450 Вт має особливості:<br>
-                    Дугова ручка з нековзною накладкою Softgrip<br>
-                    Metabo Quick для заміни пиляльного полотна без інструментів<br>
-                    Електроніка Vario (V) для керування частотою ходів залежно від матеріалу<br>
-                    Можливість видалення пилу завдяки під'єднанню пристрою для видалення пилу<br>
-                    Функція здування тирси для вільного огляду місця оброблення<br>
+                    <c:out value="${requestScope.product.description}"/>
                 </div>
             </div>
         </div>

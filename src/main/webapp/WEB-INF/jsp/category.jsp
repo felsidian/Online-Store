@@ -90,14 +90,13 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-secondary my-3">Apply</button>
+                <button type="submit" class="btn btn-secondary my-3">Filter</button>
             </div>
 
         </div>
         <!-- FILTERS -->
 
         <div class="col-lg-9">
-
 
             <div class="row">
                 <c:forEach items="${requestScope.products}" var="product">

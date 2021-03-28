@@ -7,7 +7,17 @@ import java.util.Map;
 
 public class Order extends Entity {
 
+    private Long userId;
     private Instant createTime;
+    private Status status;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public Instant getCreateTime() {
         return createTime;
@@ -17,10 +27,50 @@ public class Order extends Entity {
         this.createTime = createTime;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public enum Status {
+        CREATED, PAID, CANCELED;
+
+        public boolean isCreated() {
+            return this == CREATED;
+        }
+        public boolean isPaid() {
+            return this == PAID;
+        }
+        public boolean isCanceled() {
+            return this == CANCELED;
+        }
+
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
+
+        public String getStatus() {
+            return toString();
+        }
+    }
+
     public static class Record {
 
+        private Product product;
         private int quantity;
         private BigDecimal price;
+
+        public Product getProduct() {
+            return product;
+        }
+
+        public void setProduct(Product product) {
+            this.product = product;
+        }
 
         public int getQuantity() {
             return quantity;

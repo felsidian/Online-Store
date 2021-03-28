@@ -27,7 +27,7 @@ CREATE TABLE `user` (
                         role_id int,
                         blocked bit NOT NULL,           -- user is blocked if <> 0
                         PRIMARY KEY (id),
-                        FOREIGN KEY (role_id) REFERENCES role(id) ON UPDATE CASCADE ON DELETE SET NULL,
+                        -- FOREIGN KEY (role_id) REFERENCES role(id) ON UPDATE CASCADE ON DELETE SET NULL,
                         UNIQUE KEY (email)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -48,31 +48,40 @@ CREATE TABLE `product` (
                            image_url VARCHAR(2083),
                            category_id int,
                            PRIMARY KEY (id),
-                           FOREIGN KEY (category_id) REFERENCES category(id) ON UPDATE CASCADE ON DELETE SET NULL
+                           --FOREIGN KEY (category_id) REFERENCES category(id) ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- product parameters dictionary (i.e. color, weight, size...)
-CREATE TABLE `parameter` (
-                             id int NOT NULL AUTO_INCREMENT,
-                             name varchar(50) NOT NULL,
-                             type tinyint NOT NULL, -- 0 - text, 1 - decimal, 2 - set of values
-                             PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- -- product parameters dictionary (i.e. color, weight, size...)
+-- CREATE TABLE `parameter` (
+--                              id int NOT NULL AUTO_INCREMENT,
+--                              name varchar(50) NOT NULL,
+--                              type tinyint NOT NULL, -- 0 - text, 1 - decimal, 2 - set of values
+--                              PRIMARY KEY (id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+--
+-- CREATE TABLE `product_parameter` (
+--                                      product_id int NOT NULL,
+--                                      parameter_id int NOT NULL,
+--                                      `value` varchar(100) NOT NULL,
+--                                      FOREIGN KEY (product_id) REFERENCES product(id) ON UPDATE CASCADE ON DELETE CASCADE,
+--                                      FOREIGN KEY (parameter_id) REFERENCES parameter(id) ON UPDATE CASCADE ON DELETE CASCADE
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE `product_parameter` (
-                                     product_id int NOT NULL,
-                                     parameter_id int NOT NULL,
-                                     `value` varchar(100) NOT NULL,
-                                     FOREIGN KEY (product_id) REFERENCES product(id) ON UPDATE CASCADE ON DELETE CASCADE,
-                                     FOREIGN KEY (parameter_id) REFERENCES parameter(id) ON UPDATE CASCADE ON DELETE CASCADE
+-- statuses dictionary
+CREATE TABLE `status` (
+                        id int NOT NULL AUTO_INCREMENT,
+                        name varchar(255) NOT NULL,
+                        PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `order` (
                          id int NOT NULL AUTO_INCREMENT,
                          user_id int NOT NULL,
                          create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                         status_id int,
                          PRIMARY KEY (id),
-                         FOREIGN KEY (user_id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE
+                         --FOREIGN KEY (user_id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE
+                         --FOREIGN KEY (status_id) REFERENCES status(id) ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `order_content` (
@@ -80,6 +89,6 @@ CREATE TABLE `order_content` (
                                  product_id int NOT NULL,
                                  quantity int NOT NULL DEFAULT 1,
                                  price decimal(10, 2) NOT NULL,
-                                 FOREIGN KEY (order_id) REFERENCES `order`(id) ON UPDATE CASCADE ON DELETE CASCADE,
-                                 FOREIGN KEY (product_id) REFERENCES product(id) ON UPDATE CASCADE ON DELETE CASCADE
+                                 --FOREIGN KEY (order_id) REFERENCES `order`(id) ON UPDATE CASCADE ON DELETE CASCADE,
+                                 --FOREIGN KEY (product_id) REFERENCES product(id) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
