@@ -3,16 +3,18 @@ const cartSizeEl = document.getElementById('cart-size');
 const totalPriceEl = document.getElementById('total-price');
 const cartBody = document.getElementById('cart-list');
 const orderForm = document.getElementById('order-form');
-const submitOrderButton = document.getElementById('order-sobmit');
+const submitOrderButton = document.getElementById('order-submit');
 
+// Making an order
 orderForm.addEventListener('submit', event => {
     const cart = CartStorage.getCart();
     let requestParams = "";
     for (let id of Object.keys(cart)) {
-        requestParams = requestParams + id + ",";
+        requestParams = requestParams + id + ";" + cart[id].quantity + ";";
     }
-    orderForm["pids"].value = requestParams;
+    orderForm["cart"].value = requestParams;
     CartStorage.clearCart();
+    console.log(requestParams);
     if(requestParams === "")
         event.preventDefault();
 
@@ -37,16 +39,18 @@ document.querySelectorAll('.add-to-cart').forEach(item => {
     })
 });
 
+// updating small badge on Cart button corner
 function updateCartSizeEl() {
     let cartSize = Object.keys(CartStorage.getCart()).length;
     let str = "";
+    str = cartSize.toString();
+    cartSizeEl.innerText = str;
     if(cartSize > 0) {
-        str = cartSize.toString();
         submitOrderButton.removeAttribute("disabled");
     }
-    else
+    else {
         submitOrderButton.setAttribute("disabled", "");
-    cartSizeEl.innerText = str;
+    }
 }
 
 function updateTotal() {
@@ -98,7 +102,7 @@ function createCartItemElement(id, name, price, quantity) {
         '<div class="col-3">',
         '<img class="card-img-top p-3" src="https://i2.rozetka.ua/goods/10128204/bosch_06039a210b_images_10128204791.jpg" style="height: 100px; object-fit: scale-down;" alt="">',
         '</div>',
-        '<div class="col-8">',
+        '<div class="col-9">',
         '<div class="row d-flex align-items-center">',
         '<div class="col-7">',
         '<div class="product-name">',

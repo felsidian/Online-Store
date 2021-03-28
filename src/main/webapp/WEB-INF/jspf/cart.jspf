@@ -14,7 +14,7 @@
                             <div class="col-3">
                                 <img class="card-img-top p-3" src="https://i2.rozetka.ua/goods/10128204/bosch_06039a210b_images_10128204791.jpg" style="height: 100px; object-fit: scale-down;" alt="">
                             </div>
-                            <div class="col-8">
+                            <div class="col-9">
                                 <div class="row d-flex align-items-center">
                                     <div class="col-7">
                                         <div class="product-name">
@@ -42,9 +42,17 @@
                     <h4>Total price: <span id="total-price">0</span> грн</h4>
                 </div>
                 <form action="order" method="post" id="order-form">
-                    <input type="hidden" name="pids" value="">
+                    <input type="hidden" name="cart" value="">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="order-sobmit">Make order</button>
+                    <c:choose>
+                        <c:when test="${sessionScope.user == null}">
+                            <button type="submit" class="btn btn-primary" id="order-submit" disabled hidden>Make order</button>
+                            <span class="text-muted">Need to login</span>
+                        </c:when>
+                        <c:otherwise>
+                            <button type="submit" class="btn btn-primary" id="order-submit" disabled>Make order</button>
+                        </c:otherwise>
+                    </c:choose>
                 </form>
             </div>
         </div>
