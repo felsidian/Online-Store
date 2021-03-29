@@ -1,5 +1,6 @@
 package com.gmail.hryhoriev75.onlineshop.model;
 
+import com.gmail.hryhoriev75.onlineshop.Constants;
 import com.gmail.hryhoriev75.onlineshop.db.DBHelper;
 import com.gmail.hryhoriev75.onlineshop.model.entity.Category;
 import com.gmail.hryhoriev75.onlineshop.model.entity.Product;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ProductDAO {
 
@@ -17,7 +19,7 @@ public class ProductDAO {
     private static final String SQL_GET_ALL_PRODUCTS_ORDERED = SQL_GET_ALL_PRODUCTS + " ORDER BY product.id DESC";
     private static final String SQL_GET_LIMIT_PRODUCTS = SQL_GET_ALL_PRODUCTS_ORDERED + " LIMIT ?";
     private static final String SQL_FIND_PRODUCT_BY_ID = SQL_GET_ALL_PRODUCTS + " WHERE product.id=?";
-    private static final String SQL_GET_ALL_PRODUCTS_BY_CATEGORY = "SELECT * FROM product WHERE category_id=?";
+    private static final String SQL_GET_ALL_PRODUCTS_BY_CATEGORY = "SELECT * FROM product WHERE category_id=? LIMIT ?, ?";
     private static final String SQL_GET_ALL_CATEGORIES = "SELECT * FROM category";
     private static final String SQL_FIND_CATEGORY_BY_ID ="SELECT * FROM category WHERE id=?";
 
@@ -31,6 +33,11 @@ public class ProductDAO {
     private static final String FIELD_PRICE = "price";
     private static final String FIELD_IMAGE_URL = "image_url";
     private static final String FIELD_CATEGORY_ID = "category_id";
+
+    private static final Map<String, String> COLUMN_TO_SORT_MAP = Map.of(Constants.SORT_A_Z, "name", Constants.SORT_Z_A, "name",
+            Constants.SORT_CHEAP_FIRST, "price", Constants.SORT_EXPENSIVE_FIRST, "price", Constants.SORT_NEW_FIRST, "id");
+    private static final Map<String, String> SORT_DIRECTION_MAP = Map.of(Constants.SORT_A_Z, "ASC", Constants.SORT_Z_A, "DESC",
+            Constants.SORT_CHEAP_FIRST, "ASC", Constants.SORT_EXPENSIVE_FIRST, "DESC", Constants.SORT_NEW_FIRST, "DESC");
 
     public static Product findProductById(long id) {
         Product product = null;
@@ -78,11 +85,14 @@ public class ProductDAO {
         return categories;
     }
 
-    public static List<Product> getAllProductsByCategory(Category category) {
-        List<Product> list = new ArrayList<>();
+    public static List<Product> getAllProductsByCategory(Category category, String sort, long offset, long limit) {
+        List<Product> list = new ArrayList<>((int)limit);
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_PRODUCTS_BY_CATEGORY)) {
+             PreparedStatement pst = con.prepareStatement("SELECT * FROM product WHERE category_id=? ORDER BY " +
+                     COLUMN_TO_SORT_MAP.getOrDefault(sort,"") + " " + SORT_DIRECTION_MAP.getOrDefault(sort,"") + " LIMIT ?, ?")) {
             pst.setLong(1, category.getId());
+            pst.setLong(2, offset);
+            pst.setLong(3, limit);
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     Product product = mapProduct(rs);

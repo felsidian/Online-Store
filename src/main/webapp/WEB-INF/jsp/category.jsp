@@ -32,10 +32,31 @@
                     <fmt:message key="sort"/>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <li><a class="dropdown-item" href="#"><fmt:message key="cheapFirst"/></a></li>
-                    <li><a class="dropdown-item" href="#"><fmt:message key="expensiveFirst"/></a></li>
-                    <li><a class="dropdown-item" href="#"><fmt:message key="fromA"/></a></li>
-                    <li><a class="dropdown-item" href="#"><fmt:message key="fromZ"/></a></li>
+                    <li>
+                        <a class="dropdown-item ${requestScope.sort eq Constants.SORT_NEW_FIRST ? 'active' : ''}" href="<c:out value="${Path.CATEGORY_PATH += '?' += requestScope.queryWithNoSort += '&' += 'sort=' += Constants.SORT_NEW_FIRST}"/>">
+                            <fmt:message key="newFirst"/>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item ${requestScope.sort eq Constants.SORT_CHEAP_FIRST ? 'active' : ''}" href="<c:out value="${Path.CATEGORY_PATH += '?' += requestScope.queryWithNoSort += '&' += 'sort=' += Constants.SORT_CHEAP_FIRST}"/>">
+                            <fmt:message key="cheapFirst"/>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item ${requestScope.sort eq Constants.SORT_EXPENSIVE_FIRST ? 'active' : ''}" href="<c:out value="${Path.CATEGORY_PATH += '?' += requestScope.queryWithNoSort += '&' += 'sort=' += Constants.SORT_EXPENSIVE_FIRST}"/>">
+                            <fmt:message key="expensiveFirst"/>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item ${requestScope.sort eq Constants.SORT_A_Z ? 'active' : ''}" href="<c:out value="${Path.CATEGORY_PATH += '?' += requestScope.queryWithNoSort += '&' += 'sort=' += Constants.SORT_A_Z}"/>">
+                            <fmt:message key="fromA"/>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item ${requestScope.sort eq Constants.SORT_Z_A ? 'active' : ''}" href="<c:out value="${Path.CATEGORY_PATH += '?' += requestScope.queryWithNoSort += '&' += 'sort=' += Constants.SORT_Z_A}"/>">
+                            <fmt:message key="fromZ"/>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -45,59 +66,69 @@
         <div class="col">
             <nav class="float-end">
                 <ul class="pagination">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#"><fmt:message key="prev"/></a>
+                    <li class="page-item ${requestScope.pageNumber > 1 ? '' : 'disabled' }">
+                        <a class="page-link" href="<c:out value="${Path.CATEGORY_PATH += '?' += requestScope.queryWithNoPage += '&' += 'page=' += requestScope.pageNumber - 1}"/>">
+                            <fmt:message key="prev"/>
+                        </a>
                     </li>
                     <li class="page-item disabled">
-                        <p class="page-link disabled" >1</p>
+                        <p class="page-link disabled"><c:out value="${requestScope.pageNumber}"/></p>
                     </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#"><fmt:message key="next"/></a>
+                    <li class="page-item ${requestScope.nextPageExists ? '' : 'disabled'}">
+                        <a class="page-link" href="<c:out value="${Path.CATEGORY_PATH += '?' += requestScope.queryWithNoPage += '&' += 'page=' += requestScope.pageNumber + 1 }"/>">
+                            <fmt:message key="next"/>
+                        </a>
                     </li>
                 </ul>
             </nav>
         </div>
         <!-- PAGINATION -->
+
     </div>
     <div class="row">
         <div class="w-100"></div>
 
         <!-- FILTERS-->
-        <div class="col-lg-3">
-            <div class="list-group">
-                <div class="input-group mb-3">
-                    <span class="input-group-text"><fmt:message key="priceFrom"/></span>
-                    <input type="text" class="form-control" aria-label="<fmt:message key="priceFrom"/>">
-                    <span class="input-group-text"><fmt:message key="to"/></span>
-                    <input type="text" class="form-control" aria-label="<fmt:message key="to"/>">
-                    <span class="input-group-text"><fmt:message key="uah"/></span>
+        <div class="col-lg-3 col-md-5">
+            <form action="category" method="get" id="filter-form">
+                <input type="hidden" name="id" value="<c:out value="${param.id}"/>" ${param.id == null ? 'disabled' : ''}>
+                <input type="hidden" name="sort" value="<c:out value="${param.sort}"/>" ${param.sort == null ? 'disabled' : ''}>
+                <input type="hidden" name="page" value="<c:out value="${param.page}"/>" ${param.page == null ? 'disabled' : ''}>
+                <div class="list-group">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><fmt:message key="priceFrom"/></span>
+                        <input type="text" class="form-control" name="price-from" aria-label="<fmt:message key="priceFrom"/>">
+                        <span class="input-group-text"><fmt:message key="to"/></span>
+                        <input type="text" class="form-control" name="price-to" aria-label="<fmt:message key="to"/>">
+                        <span class="input-group-text"><fmt:message key="uah"/></span>
+                    </div>
+                    <%--<div class="card mb-3">
+                        <div class="card-header">
+                            Source of power
+                        </div>
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked="">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Battery
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Grid
+                                </label>
+                            </div>
+                        </div>
+                    </div>--%>
+                    <button type="submit" class="btn btn-secondary my-3"><fmt:message key="filter"/></button>
                 </div>
-                <%--<div class="card mb-3">
-                    <div class="card-header">
-                        Source of power
-                    </div>
-                    <div class="card-body">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked="">
-                            <label class="form-check-label" for="flexCheckChecked">
-                                Battery
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
-                                Grid
-                            </label>
-                        </div>
-                    </div>
-                </div>--%>
-                <button type="submit" class="btn btn-secondary my-3"><fmt:message key="filter"/></button>
-            </div>
-
+            </form>
         </div>
+
         <!-- FILTERS -->
 
-        <div class="col-lg-9">
+        <div class="col-lg-9 col-md-7">
 
             <div class="row">
                 <c:forEach items="${requestScope.products}" var="product">
