@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,9 @@ public class CategoryServlet extends HttpServlet {
             return;
         }
 
+        Map<String, String[]> mapp = request.getParameterMap();
+        System.out.println(Arrays.toString(mapp.get("brand")));
+
 
         String sort = RequestUtils.getStringParameter(request, "sort");
         if (sort == null) {
@@ -49,7 +53,6 @@ public class CategoryServlet extends HttpServlet {
         }
         // we querying +1 product to check if there are something to show on next page
         List<Product> products = ProductDAO.getAllProductsByCategory(category, sort, (pageNumber - 1) * PAGE_SIZE, PAGE_SIZE + 1);
-        System.out.println("products.size()" + products.size());
         boolean nextPageExists = false;
         if(products.size() > PAGE_SIZE) {
             nextPageExists = true;
