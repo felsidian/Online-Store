@@ -135,7 +135,7 @@ public class OrderDAO {
             order = new Order();
             order.setId(rs.getLong(FIELD_ID));
             order.setUserId(rs.getLong(FIELD_USER_ID));
-            order.setCreateTime(rs.getTimestamp(FIELD_CREATE_TIME).toInstant());
+            order.setCreateTime(new Date(rs.getTimestamp(FIELD_CREATE_TIME).getTime()));
             order.setStatus(Order.Status.valueOf(rs.getString(TABLE_STATUS + "." + FIELD_NAME).toUpperCase()));
         } catch (SQLException e) {
             e.printStackTrace();

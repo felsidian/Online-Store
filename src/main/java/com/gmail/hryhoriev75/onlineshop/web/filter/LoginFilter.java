@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-//@WebFilter("/*")
+@WebFilter("/*")
 public class LoginFilter implements Filter {
 
     private List<String> adminPaths = new ArrayList<>();
@@ -31,6 +31,7 @@ public class LoginFilter implements Filter {
         System.out.println("getPathInfo = " + req.getPathInfo());
         System.out.println("getRequestURI = " + req.getRequestURI());
         System.out.println("getRequestURL = " + req.getRequestURL());
+        System.out.println("getQueryString = " + req.getQueryString());
         System.out.println("===========================================");
         chain.doFilter(request, response);
 

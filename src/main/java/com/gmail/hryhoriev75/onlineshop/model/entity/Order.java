@@ -2,28 +2,29 @@ package com.gmail.hryhoriev75.onlineshop.model.entity;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public class Order extends Entity {
 
-    private Long userId;
-    private Instant createTime;
+    private long userId;
+    private Date createTime;
     private Status status;
 
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    public Instant getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Instant createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

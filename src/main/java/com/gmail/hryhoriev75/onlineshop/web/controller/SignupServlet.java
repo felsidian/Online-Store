@@ -4,6 +4,7 @@ import com.gmail.hryhoriev75.onlineshop.model.UserDAO;
 import com.gmail.hryhoriev75.onlineshop.model.entity.User;
 import com.gmail.hryhoriev75.onlineshop.security.Security;
 import com.gmail.hryhoriev75.onlineshop.web.Path;
+import com.gmail.hryhoriev75.onlineshop.web.utils.RequestUtils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -28,8 +29,7 @@ public class SignupServlet extends HttpServlet {
             response.sendRedirect(Path.SIGNUP_PATH);
             return;
         }
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("user") != null) {
+        if (RequestUtils.getSessionAttribute(request, "user", User.class) != null) {
             // if we somehow opened /signup page while being already logged in, we just do redirect to catalog (/)
             response.sendRedirect(Path.CATALOG_PATH);
         } else {
@@ -45,8 +45,7 @@ public class SignupServlet extends HttpServlet {
             response.sendRedirect(Path.SIGNUP_PATH);
             return;
         }
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("user") != null) {
+        if (RequestUtils.getSessionAttribute(request, "user", User.class) != null) {
             // if we somehow opened /signup page while being already logged in, we just do redirect to catalog (/)
             response.sendRedirect(Path.CATALOG_PATH);
             return;
@@ -108,15 +107,11 @@ public class SignupServlet extends HttpServlet {
         } else {
             User user = UserDAO.findUserByEmail(email);
             // lets put him into session and redirect to catalog (/)
-            session = request.getSession(true);
+            HttpSession session = request.getSession(true);
             session.setAttribute("user", user);
             session.setMaxInactiveInterval(86400); // 1 day
             response.sendRedirect(Path.CATALOG_PATH);
         }
-    }
-
-    private void redirect(HttpServletResponse response, String path) throws IOException {
-        response.sendRedirect(path);
     }
 
     private void passErrorToView(HttpServletRequest request, HttpServletResponse response, Map<String, String> viewAttributes) throws ServletException, IOException {

@@ -22,7 +22,7 @@
     <div class="row">
         <div class="col">
             <h4 class="my-4"><fmt:message key="orderN"/><c:out value="${requestScope.order.id}"/></h4>
-            <h6 class="my-4"><fmt:message key="createDate"/>: <c:out value="${requestScope.order.createTime}"/></h6>
+            <h6 class="my-4"><fmt:message key="createDate"/>: <fmt:formatDate type="both" value="${requestScope.order.createTime}"/></h6>
             <h6 class="my-4"><fmt:message key="status"/>: <fmt:message key="${requestScope.order.status}"/></h6>
             <ul class="list-group" id="cart-list">
                 <c:forEach items="${requestScope.orderContent}" var="record">

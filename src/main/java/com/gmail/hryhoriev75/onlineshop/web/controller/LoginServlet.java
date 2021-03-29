@@ -4,6 +4,7 @@ import com.gmail.hryhoriev75.onlineshop.model.UserDAO;
 import com.gmail.hryhoriev75.onlineshop.model.entity.User;
 import com.gmail.hryhoriev75.onlineshop.security.Security;
 import com.gmail.hryhoriev75.onlineshop.web.Path;
+import com.gmail.hryhoriev75.onlineshop.web.utils.RequestUtils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -30,8 +31,8 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect(Path.LOGIN_PATH);
             return;
         }
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("user") != null) {
+
+        if (RequestUtils.getSessionAttribute(request, "user", User.class) != null) {
             // if we somehow opened /login page while being already logged in, we just do redirect to catalog (/)
             response.sendRedirect(Path.CATALOG_PATH);
         } else {
@@ -42,8 +43,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("user") != null) {
+        if (RequestUtils.getSessionAttribute(request, "user", User.class) != null) {
             // if we somehow opened /login page while being already logged in, we just do redirect to catalog (/)
             response.sendRedirect(Path.CATALOG_PATH);
             return;
@@ -93,7 +93,7 @@ public class LoginServlet extends HttpServlet {
 
         // if we are here then login information was correct and user was identified
         // lets put him into session and redirect to catalog (/)
-        session = request.getSession(true);
+        HttpSession session = request.getSession(true);
         session.setAttribute("user", user);
         //session.setAttribute("roleName", user.getRoleName());
         if("".equals(remember))

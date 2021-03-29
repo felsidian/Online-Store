@@ -21,21 +21,21 @@
     </nav>
     <div class="row">
         <div class="col-lg-7">
-            <div class="card my-4">
+            <div class="card mt-4">
                 <div class="card-header">
                     <h3><c:out value="${requestScope.product.name}"/></h3>
                 </div>
 
                 <div class="card-body">
-                    <img class="card-img-top img-prev p-3" src="<c:out value="${requestScope.product.imageUrl}"/>" style="height: 400px; object-fit: scale-down;" alt="">
+                    <img class="card-img-top img-prev p-3" src="<c:out value="${requestScope.product.imageUrl}"/>" style="height: 100%; max-height: 400px; object-fit: scale-down;" alt="">
                 </div>
-                <div class="card-footer">
-                    <h5 class="d-inline"><c:out value="${requestScope.product.price}"/> грн</h5>
-                    <c:set var="productString" value="${requestScope.product.id += ';' += requestScope.product.name += ';' += requestScope.product.price}"/>
-                    <button type="button" class="btn btn-info float-end add-to-cart" data-pr-info="<c:out value="${productString}"/>"><fmt:message key="addToCart"/></button></div>
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <h5><c:out value="${requestScope.product.price}"/> грн</h5>
+                    <c:set var="productString" value="${requestScope.product.id += ';' += requestScope.product.name += ';' += requestScope.product.price += ';' += requestScope.product.imageUrl}"/>
+                    <button type="button" class="btn btn-info  add-to-cart" data-pr-info="<c:out value="${productString}"/>"><fmt:message key="addToCart"/></button></div>
             </div>
         </div>
-        <div class="col-lg-5 my-4">
+        <div class="col-lg-5 mt-4">
             <table class="table table-striped">
                 <tbody>
                     <tr>
@@ -46,7 +46,7 @@
             </table>
         </div>
         <div class="w-100"></div>
-        <div class="col-sm">
+        <div class="col-sm mt-2">
             <div class="card">
                 <div class="card-body">
                     <c:out value="${requestScope.product.description}"/>

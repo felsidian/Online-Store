@@ -1,7 +1,7 @@
 const CartStorage = {
 
     /*
-     * returns cart= {"id" : {name, price, quantity}}
+     * returns cart= {"id" : {name, price, quantity, imageUrl}}
      */
     getCart: function() {
         if(localStorage.cart === undefined) {
@@ -19,12 +19,12 @@ const CartStorage = {
         return price;
     },
 
-    addToCart: function(id, name, price) {
+    addToCart: function(id, name, price, imageUrl) {
         let cart = this.getCart();
         let quantity = 1;
         if (id in cart)
             quantity += cart[id].quantity;
-        cart[id] = {name: name, price: price, quantity: quantity};
+        cart[id] = {name: name, price: price, quantity: quantity, imageUrl: imageUrl};
         localStorage.cart = JSON.stringify(cart);
     },
 

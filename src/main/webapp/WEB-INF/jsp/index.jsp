@@ -17,7 +17,7 @@
 
         <div class="col-lg-3">
 
-            <div class="list-group">
+            <div class="list-group mb-4">
                 <c:forEach items="${requestScope.categories}" var="category">
                     <a href="<c:out value="${Path.CATEGORY_PATH += '?id=' += category.id}"/>" class="list-group-item"><c:out value="${category.name}"/></a>
                 </c:forEach>
@@ -28,12 +28,12 @@
 
         <div class="col-lg-9">
 
-            <img src="http://openchina.com.ua/wp-content/uploads/Dawer-catalogue1.jpg" class="d-block w-100 mb-4" alt="..." style="height: 350px; object-fit: scale-down;">
+            <img src="http://openchina.com.ua/wp-content/uploads/Dawer-catalogue1.jpg" class="d-block w-100 mb-4" alt="..." style="object-fit: scale-down;">
 
             <!-- products -->
             <div class="row">
                 <c:forEach items="${requestScope.products}" var="product">
-                    <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="col-xl-4 col-md-6 mb-4">
                         <%@include file="/WEB-INF/jspf/product-card.jspf" %>
                     </div>
                 </c:forEach>

@@ -32,11 +32,12 @@ public class LangFilter implements Filter {
     private String getCookieValue(String name, HttpServletRequest request) {
         if(request != null) {
             Cookie[] cookies = request.getCookies();
-            for (Cookie cookie : cookies) {
-                if (name.equals(cookie.getName().toLowerCase())) {
-                    return cookie.getValue();
+            if(cookies != null)
+                for (Cookie cookie : cookies) {
+                    if (name.equals(cookie.getName().toLowerCase())) {
+                        return cookie.getValue();
+                    }
                 }
-            }
         }
         return null;
     }
