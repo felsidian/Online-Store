@@ -11,6 +11,10 @@ public class Path {
     public static final String ORDER_PATH = "/order";
     public static final String ORDERS_PATH = "/orders";
 
-    public static final String NOT_FOUND_PATH = "/404.jsp";
+    public static final String ADD_PRODUCT_PATH = "/add-product";
+    public static final String USERS_PATH = "/users";
+    public static final String ALL_ORDERS_PATH = "/all-orders";
+
+    public static final String NOT_FOUND_PATH = "/WEB-INF/error404.jsp";
 
 }

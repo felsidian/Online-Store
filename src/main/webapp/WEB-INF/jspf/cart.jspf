@@ -41,7 +41,7 @@
                 <div class="ms-4">
                     <h5><fmt:message key="total"/>: <span id="total-price">0</span> <fmt:message key="uah"/></h5>
                 </div>
-                <form action="order" method="post" id="order-form">
+                <form action="${Path.ORDER_PATH}" method="post" id="order-form">
                     <div class="mx-4">
                         <input type="hidden" name="cart" value="">
                         <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal"><fmt:message key="close"/></button>

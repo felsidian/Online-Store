@@ -1,8 +1,7 @@
-package com.gmail.hryhoriev75.onlineshop.web.controller;
+package com.gmail.hryhoriev75.onlineshop.web.controller.admin;
 
 import com.gmail.hryhoriev75.onlineshop.model.OrderDAO;
 import com.gmail.hryhoriev75.onlineshop.model.entity.Order;
-import com.gmail.hryhoriev75.onlineshop.model.entity.Product;
 import com.gmail.hryhoriev75.onlineshop.model.entity.User;
 import com.gmail.hryhoriev75.onlineshop.web.Path;
 import com.gmail.hryhoriev75.onlineshop.web.utils.RequestUtils;
@@ -12,14 +11,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "OrdersServlet", value = Path.ORDERS_PATH)
-public class OrdersServlet extends HttpServlet {
+@WebServlet(name = "UsersServlet", value = Path.USERS_PATH)
+public class UsersServlet extends HttpServlet {
 
     private static final String ORDERS_VIEW_PATH = "/WEB-INF/jsp/orders.jsp";
 

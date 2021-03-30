@@ -17,7 +17,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "OrderServlet", value = Path.ORDER_PATH + "/*")
+@WebServlet(name = "OrderServlet", value = Path.ORDER_PATH)
 public class OrderServlet extends HttpServlet {
 
     private static final String ORDER_VIEW_PATH = "/WEB-INF/jsp/order.jsp";

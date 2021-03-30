@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "LogoutServlet", value = Path.LOGOUT_PATH + "/*")
+@WebServlet(name = "LogoutServlet", value = Path.LOGOUT_PATH)
 public class LogoutServlet extends HttpServlet {
 
     @Override

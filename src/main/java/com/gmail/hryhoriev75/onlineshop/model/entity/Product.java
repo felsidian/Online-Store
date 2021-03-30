@@ -2,6 +2,7 @@ package com.gmail.hryhoriev75.onlineshop.model.entity;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Map;
 
 public class Product extends Entity {
@@ -9,10 +10,13 @@ public class Product extends Entity {
     private String name;
     private String brand;
     private String description;
-    private Instant createTime;
+    private Date createTime;
     private BigDecimal price;
     private String imageUrl;
     private Category category; // "user" or "admin"
+    private int power;
+    private BigDecimal weight;
+    private String country;
 
     public String getName() {
         return name;
@@ -38,11 +42,11 @@ public class Product extends Entity {
         this.description = description;
     }
 
-    public Instant getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Instant createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
@@ -70,8 +74,28 @@ public class Product extends Entity {
         this.category = category;
     }
 
-    @Override
-    public String toString() {
-        return "asdaqweqw11";
+    public int getPower() {
+        return power;
     }
+
+    public void setPower(int power) {
+        this.power = power;
+    }
+
+    public BigDecimal getWeight() {
+        return weight;
+    }
+
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
 }

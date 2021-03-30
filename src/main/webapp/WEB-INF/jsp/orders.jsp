@@ -20,7 +20,7 @@
     </nav>
     <div class="row">
         <div class="col">
-            <h4 class="my-4"><fmt:message key="myOrders"/></h4>
+            <h1 class="mb-3"><fmt:message key="myOrders"/></h1>
             <ul class="list-group" id="cart-list">
                 <c:forEach items="${requestScope.orders}" var="order">
                     <!--ITEM-->

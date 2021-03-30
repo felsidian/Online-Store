@@ -1,4 +1,4 @@
-package com.gmail.hryhoriev75.onlineshop.web;
+package com.gmail.hryhoriev75.onlineshop.web.utils;
 
 public class CustomTagLibrary {
 

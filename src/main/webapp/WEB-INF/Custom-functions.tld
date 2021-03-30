@@ -12,7 +12,7 @@
     <short-name>asd</short-name>
     <function>
         <name>contains</name>
-        <function-class>com.gmail.hryhoriev75.onlineshop.web.CustomTagLibrary</function-class>
+        <function-class>com.gmail.hryhoriev75.onlineshop.web.utils.CustomTagLibrary</function-class>
         <function-signature>boolean contains(java.lang.String[],java.lang.String)
         </function-signature>
     </function>

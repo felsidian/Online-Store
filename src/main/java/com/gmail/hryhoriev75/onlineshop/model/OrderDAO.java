@@ -12,17 +12,6 @@ import java.util.List;
 
 public class OrderDAO {
 
-    private static final String SQL_FIND_ORDER_BY_ID =
-            "SELECT * FROM `order` LEFT JOIN status ON status_id=status.id WHERE order.id=?";
-    private static final String SQL_FIND_ORDERS_BY_USER_ID =
-            "SELECT * FROM `order` LEFT JOIN status ON status_id=status.id WHERE user_id=?";
-    private static final String SQL_ADD_ORDER = "INSERT INTO `order`(user_id,create_time,status_id)VALUES(?,?,(SELECT id FROM status WHERE name=? LIMIT 1))";
-    private static final String SQL_ADD_ORDER_CONTENT =
-            "INSERT INTO order_content(order_id,product_id,quantity,price)VALUES(?,?,?,(SELECT price FROM product WHERE id=? LIMIT 1))";
-    private static final String SQL_GET_ORDER_CONTENT =
-            "SELECT * FROM order_content INNER JOIN product ON product_id=product.id WHERE order_id=?";
-
-
     private static final String TABLE_STATUS = "status";
     private static final String TABLE_ORDER_CONTENT = "order_content";
 
@@ -37,7 +26,8 @@ public class OrderDAO {
     public static Order findOrderById(long id) {
         Order order = null;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement(SQL_FIND_ORDER_BY_ID)) {
+             PreparedStatement pst = con.prepareStatement("SELECT * FROM `order` LEFT JOIN status ON status_id=status.id " +
+                     "WHERE order.id=?")) {
             pst.setLong(1, id);
             try (ResultSet rs = pst.executeQuery()) {
                 if(rs.next())
@@ -60,7 +50,8 @@ public class OrderDAO {
     private static long addOrder(long userId, Instant createTime, Order.Status status) {
         long orderId = 0;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement(SQL_ADD_ORDER, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement pst = con.prepareStatement("INSERT INTO `order`(user_id,create_time,status_id)" +
+                     "VALUES(?,?,(SELECT id FROM status WHERE name=? LIMIT 1))", Statement.RETURN_GENERATED_KEYS)) {
             pst.setLong(1, userId);
             pst.setTimestamp(2, Timestamp.from(createTime));
             pst.setString(3, status.toString());
@@ -82,7 +73,8 @@ public class OrderDAO {
     private static boolean addOrderContent(long orderId, List<Order.Record> orderContent) {
         boolean result = false;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement(SQL_ADD_ORDER_CONTENT)) {
+             PreparedStatement pst = con.prepareStatement("INSERT INTO order_content(order_id,product_id,quantity,price)" +
+                     "VALUES(?,?,?,(SELECT price FROM product WHERE id=? LIMIT 1))")) {
             for(Order.Record record : orderContent) {
                 pst.setLong(1, orderId);
                 pst.setLong(2, record.getProduct().getId());
@@ -100,7 +92,7 @@ public class OrderDAO {
     public static List<Order.Record> getOrderContent(long orderId) {
         List<Order.Record> orderContent = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement(SQL_GET_ORDER_CONTENT)) {
+             PreparedStatement pst = con.prepareStatement("SELECT * FROM order_content INNER JOIN product ON product_id=product.id WHERE order_id=?")) {
             pst.setLong(1, orderId);
             try(ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
@@ -116,7 +108,7 @@ public class OrderDAO {
     public static List<Order> getOrdersByUserId(long orderId) {
         List<Order> orders = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement(SQL_FIND_ORDERS_BY_USER_ID)) {
+             PreparedStatement pst = con.prepareStatement("SELECT * FROM `order` LEFT JOIN status ON status_id=status.id WHERE user_id=?")) {
             pst.setLong(1, orderId);
             try(ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
@@ -146,7 +138,6 @@ public class OrderDAO {
     private static Order.Record mapOrderContent(ResultSet rs) {
         Order.Record record = null;
         try {
-            System.out.println("mapOrderContent start");
             record = new Order.Record();
             Product product = new Product();
             product.setId(rs.getLong(FIELD_ID));
@@ -155,8 +146,6 @@ public class OrderDAO {
             record.setProduct(product);
             record.setQuantity(rs.getInt(FIELD_QUANTITY));
             record.setPrice(rs.getBigDecimal(TABLE_ORDER_CONTENT + "." + FIELD_PRICE));
-            System.out.println(product.getId());
-            System.out.println("mapOrderContent end");
         } catch (SQLException e) {
             e.printStackTrace();
         }

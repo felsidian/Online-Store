@@ -12,13 +12,13 @@
     <div class="outer">
     <h2><fmt:message key="login"/></h2>
 
-        <form action="login" method="post">
+        <form action="${Path.LOGIN_PATH}" method="post">
             <div class="container">
                 <label for="email"><b><fmt:message key="email"/></b></label>
-                <input type="text" placeholder="<fmt:message key="enterEmail"/>" id="email" name="email" required value="<c:out value="${email}" default="" />">
+                <input type="email" placeholder="<fmt:message key="enterEmail"/>" id="email" name="email" required value="<c:out value="${email}" default="" />">
 
                 <label for="password"><b><fmt:message key="password"/></b></label>
-                <input type="password" placeholder="<fmt:message key="enterPassword"/>" id="password" name="password" required>
+                <input type="password" placeholder="<fmt:message key="enterPassword"/>" id="password" name="password" minlength="8" maxlength="64" required>
 
                 <div style="color:red; text-align: center;"><c:out value="${error}" /></div>
 

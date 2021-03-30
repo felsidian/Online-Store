@@ -17,18 +17,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(name = "SignupServlet", value = Path.SIGNUP_PATH + "/*")
+@WebServlet(name = "SignupServlet", value = Path.SIGNUP_PATH)
 public class SignupServlet extends HttpServlet {
 
     private static final String SIGNUP_VIEW_PATH = "/WEB-INF/jsp/signup.jsp";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if(request.getPathInfo() != null) {
-            // if we somehow ended up with /signup/*, redirection to /signup
-            response.sendRedirect(Path.SIGNUP_PATH);
-            return;
-        }
         if (RequestUtils.getSessionAttribute(request, "user", User.class) != null) {
             // if we somehow opened /signup page while being already logged in, we just do redirect to catalog (/)
             response.sendRedirect(Path.CATALOG_PATH);
@@ -40,11 +35,6 @@ public class SignupServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(request.getPathInfo() != null) {
-            // if we somehow ended up with /signup/*, redirection to /signup
-            response.sendRedirect(Path.SIGNUP_PATH);
-            return;
-        }
         if (RequestUtils.getSessionAttribute(request, "user", User.class) != null) {
             // if we somehow opened /signup page while being already logged in, we just do redirect to catalog (/)
             response.sendRedirect(Path.CATALOG_PATH);
@@ -53,7 +43,7 @@ public class SignupServlet extends HttpServlet {
 
         // continue to perform signup
         // retrieving parameters from signup form
-        String email = request.getParameter("email");
+        String email = request.getParameter("email").toLowerCase().trim();
         String password = request.getParameter("password");
         String name = request.getParameter("name");
         String phoneNumber = request.getParameter("phoneNumber");

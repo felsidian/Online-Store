@@ -10,13 +10,6 @@ import java.sql.SQLException;
 
 public class UserDAO {
 
-    private static final String SQL_FIND_USER_BY_ID =
-            "SELECT user.*,role.name AS role_name FROM user LEFT JOIN role ON role_id=role.id WHERE user.id=?";
-    private static final String SQL_FIND_USER_BY_EMAIL =
-            "SELECT user.*,role.name AS role_name FROM user LEFT JOIN role ON role_id=role.id WHERE user.email=?";
-    private static final String SQL_ADD_USER =
-            "INSERT INTO user(email,password,name,phone_number,locale,role_id,blocked)VALUES(?,?,?,?,?,(SELECT id FROM role WHERE name=? LIMIT 1),?)";
-
     private static final String FIELD_ID = "id";
     private static final String FIELD_NAME = "name";
     private static final String FIELD_EMAIl = "email";
@@ -28,7 +21,8 @@ public class UserDAO {
     public static User findUserById(long id) {
         User user = null;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement(SQL_FIND_USER_BY_ID)) {
+             PreparedStatement pst = con.prepareStatement("SELECT user.*,role.name AS role_name FROM user " +
+                     "LEFT JOIN role ON role_id=role.id WHERE user.id=?")) {
             pst.setLong(1, id);
             try (ResultSet rs = pst.executeQuery()) {
                 user = mapResultSet(rs);
@@ -42,7 +36,8 @@ public class UserDAO {
     public static User findUserByEmail(String email) {
         User user = null;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement(SQL_FIND_USER_BY_EMAIL)) {
+             PreparedStatement pst = con.prepareStatement("SELECT user.*,role.name AS role_name FROM user " +
+                     "LEFT JOIN role ON role_id=role.id WHERE user.email=?")) {
             pst.setString(1, email);
             try (ResultSet rs = pst.executeQuery()) {
                 if(rs.next())
@@ -57,8 +52,8 @@ public class UserDAO {
     public static boolean addUser(String email, String password, String name, String phoneNumber, String locale) {
         boolean result = false;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement(SQL_ADD_USER)) {
-            //email,password,name,phone_number,locale,role_id,blocked
+             PreparedStatement pst = con.prepareStatement("INSERT INTO user(email,password,name,phone_number,locale," +
+                     "role_id,blocked)VALUES(?,?,?,?,?,(SELECT id FROM role WHERE name=? LIMIT 1),?)")) {
             pst.setString(1, email);
             pst.setString(2, password);
             pst.setString(3, name);

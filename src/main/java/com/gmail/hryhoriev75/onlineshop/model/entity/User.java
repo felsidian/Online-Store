@@ -72,7 +72,7 @@ public class User extends Entity {
 
         @Override
         public String toString() {
-            return name().toLowerCase();
+            return super.toString().toLowerCase();
         }
     }
 }

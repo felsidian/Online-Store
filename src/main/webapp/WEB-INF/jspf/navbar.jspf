@@ -29,9 +29,13 @@
                     </a>
                     <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" style="">
                         <li><a class="dropdown-item" href="${Path.ORDERS_PATH}"><fmt:message key="myOrders"/></a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <c:choose>
+                            <c:when test="${sessionScope.user != null && sessionScope.user.role.admin}">
+                                <li><a class="dropdown-item" href="${Path.ADD_PRODUCT_PATH}"><fmt:message key="addProduct"/></a></li>
+                                <li><hr class="dropdown-divider"></li>
+                            </c:when>
+                        </c:choose>
                         <li><a class="dropdown-item" href="${Path.LOGOUT_PATH}"><fmt:message key="signOut"/></a></li>
                     </ul>
                 </div>

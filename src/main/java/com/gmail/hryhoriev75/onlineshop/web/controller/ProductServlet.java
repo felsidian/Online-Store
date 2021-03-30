@@ -24,7 +24,7 @@ public class ProductServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         long productId = RequestUtils.getLongParameter(request, "id");
         if (productId <= 0) {
-            response.sendRedirect(Path.NOT_FOUND_PATH);
+            request.getRequestDispatcher(Path.NOT_FOUND_PATH).forward(request, response);
             return;
         }
         Product product = ProductDAO.findProductById(productId);

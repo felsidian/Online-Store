@@ -19,19 +19,13 @@ import java.util.Map;
 
 import static com.gmail.hryhoriev75.onlineshop.web.Path.LOGIN_PATH;
 
-@WebServlet(name = "LoginServlet", value = LOGIN_PATH + "/*")
+@WebServlet(name = "LoginServlet", value = LOGIN_PATH)
 public class LoginServlet extends HttpServlet {
 
     private static final String LOGIN_VIEW_PATH = "/WEB-INF/jsp/login.jsp";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if(request.getPathInfo() != null) {
-            // if we somehow ended up with /login/*, redirection to /login
-            response.sendRedirect(Path.LOGIN_PATH);
-            return;
-        }
-
         if (RequestUtils.getSessionAttribute(request, "user", User.class) != null) {
             // if we somehow opened /login page while being already logged in, we just do redirect to catalog (/)
             response.sendRedirect(Path.CATALOG_PATH);
@@ -51,11 +45,11 @@ public class LoginServlet extends HttpServlet {
 
         // continue to perform login
         // retrieving parameters from login form
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String email = request.getParameter("email").toLowerCase().trim();
+        String password = request.getParameter("password").toLowerCase().trim();
         String remember = request.getParameter("remember"); // "checked" or ""
 
-        // filling map with parameters which will be passed to the view
+        // filling map with parameters which will be passed to the view in case of error
         Map<String, String> viewAttributes = new HashMap<>();
         viewAttributes.put("email", email);
         viewAttributes.put("remember", remember);
@@ -106,8 +100,7 @@ public class LoginServlet extends HttpServlet {
     private void passErrorToView(HttpServletRequest request, HttpServletResponse response, Map<String, String> viewAttributes) throws ServletException, IOException {
         for(Map.Entry<String, String> entry : viewAttributes.entrySet())
             request.setAttribute(entry.getKey(), entry.getValue());
-        RequestDispatcher disp = request.getRequestDispatcher(LOGIN_VIEW_PATH);
-        disp.forward(request, response);
+        request.getRequestDispatcher(LOGIN_VIEW_PATH).forward(request, response);
     }
 
 }

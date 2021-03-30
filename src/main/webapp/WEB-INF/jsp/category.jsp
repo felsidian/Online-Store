@@ -99,7 +99,7 @@
 
         <!-- FILTERS-->
         <div class="col-lg-3 col-md-5">
-            <form action="category" method="get" id="filter-form">
+            <form action="${Path.CATEGORY_PATH}" method="get" id="filter-form">
                 <input type="hidden" name="id"
                        value="<c:out value="${param.id}"/>" ${param.id == null ? 'disabled' : ''}>
                 <input type="hidden" name="sort"

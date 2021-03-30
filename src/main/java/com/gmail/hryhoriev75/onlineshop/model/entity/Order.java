@@ -37,25 +37,15 @@ public class Order extends Entity {
     }
 
     public enum Status {
-        CREATED, PAID, CANCELED;
-
-        public boolean isCreated() {
-            return this == CREATED;
-        }
-        public boolean isPaid() {
-            return this == PAID;
-        }
-        public boolean isCanceled() {
-            return this == CANCELED;
-        }
+        CREATED, PAID, CANCELED, DONE;
 
         @Override
         public String toString() {
-            return name().toLowerCase();
+            return super.toString().toLowerCase();
         }
 
         public String getStatus() {
-            return name().toLowerCase();
+            return toString();
         }
     }
 

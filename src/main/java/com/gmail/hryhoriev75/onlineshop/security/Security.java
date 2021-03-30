@@ -43,7 +43,7 @@ public class Security {
     }
 
     public static boolean isEmailValid(final String email)  {
-        return email != null && EmailValidator.getInstance().isValid(email.trim());
+        return email != null && EmailValidator.getInstance().isValid(email);
     }
 
     public static boolean isPasswordValid(final String password)  {

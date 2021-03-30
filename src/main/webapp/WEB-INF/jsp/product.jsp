@@ -31,17 +31,52 @@
                 </div>
                 <div class="card-footer d-flex justify-content-between align-items-center">
                     <h5><c:out value="${requestScope.product.price}"/> грн</h5>
-                    <c:set var="productString" value="${requestScope.product.id += ';' += requestScope.product.name += ';' += requestScope.product.price += ';' += requestScope.product.imageUrl}"/>
-                    <button type="button" class="btn btn-info  add-to-cart" data-pr-info="<c:out value="${productString}"/>"><fmt:message key="addToCart"/></button></div>
+                    <div>
+                        <c:choose>
+                            <c:when test="${sessionScope.user != null && sessionScope.user.role.admin}">
+                                <a class="btn btn-secondary me-4" href="${Path.ADD_PRODUCT_PATH += '?id=' += requestScope.product.id}" role="button"><fmt:message key="editProduct"/></a>
+                            </c:when>
+                        </c:choose>
+                        <c:set var="productString" value="${requestScope.product.id += ';' += requestScope.product.name += ';' += requestScope.product.price += ';' += requestScope.product.imageUrl}"/>
+                        <button type="button" class="btn btn-info  add-to-cart" data-pr-info="<c:out value="${productString}"/>"><fmt:message key="addToCart"/></button></div>
+                    </div>
             </div>
         </div>
         <div class="col-lg-5 mt-4">
             <table class="table table-striped">
                 <tbody>
-                    <tr>
-                        <th scope="row"><fmt:message key="brand"/></th>
-                        <td><c:out value="${requestScope.product.brand}"/></td>
-                    </tr>
+                    <c:choose>
+                        <c:when test="${requestScope.product.brand != null && requestScope.product.brand ne ''}">
+                            <tr>
+                                <th scope="row"><fmt:message key="brand"/></th>
+                                <td><c:out value="${requestScope.product.brand}"/></td>
+                            </tr>
+                        </c:when>
+                    </c:choose>
+                    <c:choose>
+                        <c:when test="${requestScope.product.power > 0}">
+                            <tr>
+                                <th scope="row"><fmt:message key="power"/></th>
+                                <td><c:out value="${requestScope.product.power}"/></td>
+                            </tr>
+                        </c:when>
+                    </c:choose>
+                    <c:choose>
+                        <c:when test="${requestScope.product.weight != null && requestScope.product.weight > 0}">
+                            <tr>
+                                <th scope="row"><fmt:message key="weight"/></th>
+                                <td><c:out value="${requestScope.product.weight}"/></td>
+                            </tr>
+                        </c:when>
+                    </c:choose>
+                    <c:choose>
+                        <c:when test="${requestScope.product.country != null && requestScope.product.country ne ''}">
+                            <tr>
+                                <th scope="row"><fmt:message key="brand"/></th>
+                                <td><c:out value="${requestScope.product.country}"/></td>
+                            </tr>
+                        </c:when>
+                    </c:choose>
                 </tbody>
             </table>
         </div>
