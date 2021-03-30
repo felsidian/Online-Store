@@ -13,11 +13,13 @@ import java.util.List;
 public class OrderDAO {
 
     private static final String TABLE_STATUS = "status";
+    private static final String TABLE_USER = "user";
     private static final String TABLE_ORDER_CONTENT = "order_content";
 
     private static final String FIELD_ID = "id";
     private static final String FIELD_USER_ID = "user_id";
     private static final String FIELD_NAME = "name";
+    private static final String FIELD_EMAIL = "email";
     private static final String FIELD_CREATE_TIME = "create_time";
     private static final String FIELD_PRICE = "price";
     private static final String FIELD_IMAGE_URL = "image_url";
@@ -108,7 +110,8 @@ public class OrderDAO {
     public static List<Order> getOrdersByUserId(long orderId) {
         List<Order> orders = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT * FROM `order` LEFT JOIN status ON status_id=status.id WHERE user_id=?")) {
+             PreparedStatement pst = con.prepareStatement("SELECT `order`.*, status.name" +
+                     " FROM `order` LEFT JOIN status ON status_id=status.id WHERE user_id=?")) {
             pst.setLong(1, orderId);
             try(ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
@@ -121,6 +124,33 @@ public class OrderDAO {
         return orders;
     }
 
+    public static List<Order> getAllOrders() {
+        List<Order> orders = new ArrayList<>();
+        try (Connection con = DBHelper.getInstance().getConnection();
+             PreparedStatement pst = con.prepareStatement("SELECT `order`.*, status.name" +
+                     " FROM `order` LEFT JOIN status ON status_id=status.id")) {
+            try(ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    orders.add(mapOrder(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return orders;
+    }
+
+    public static void updateStatus(long orderId, int statusId) {
+        try (Connection con = DBHelper.getInstance().getConnection();
+             PreparedStatement pst = con.prepareStatement("UPDATE `order` SET status_id=? WHERE id=?")) {
+            pst.setInt(1, statusId);
+            pst.setLong(2, orderId);
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private static Order mapOrder(ResultSet rs) {
         Order order = null;
         try {
@@ -128,6 +158,7 @@ public class OrderDAO {
             order.setId(rs.getLong(FIELD_ID));
             order.setUserId(rs.getLong(FIELD_USER_ID));
             order.setCreateTime(new Date(rs.getTimestamp(FIELD_CREATE_TIME).getTime()));
+            System.out.println(rs.getString(TABLE_STATUS + "." + FIELD_NAME).toUpperCase());
             order.setStatus(Order.Status.valueOf(rs.getString(TABLE_STATUS + "." + FIELD_NAME).toUpperCase()));
         } catch (SQLException e) {
             e.printStackTrace();

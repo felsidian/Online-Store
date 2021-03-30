@@ -14,21 +14,22 @@ import java.util.List;
 @WebFilter("/*")
 public class LoginFilter implements Filter {
 
-    private static final List<String> ADMIN_PATHS = Arrays.asList(Path.ADD_PRODUCT_PATH, Path.USERS_PATH, Path.ALL_ORDERS_PATH);
+    private static final List<String> ADMIN_PATHS = Arrays.asList(Path.ADD_PRODUCT_PATH, Path.USERS_PATH,
+            Path.ALL_ORDERS_PATH, Path.UPDATE_PATH);
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         if (request instanceof HttpServletRequest) {
             HttpServletRequest req = (HttpServletRequest) request;
-            System.out.println("===========================================");
-            System.out.println("getContextPath = " + req.getContextPath());
-            System.out.println("getServletPath = " + req.getServletPath());
-            System.out.println("getPathTranslated = " + req.getPathTranslated());
-            System.out.println("getPathInfo = " + req.getPathInfo());
-            System.out.println("getRequestURI = " + req.getRequestURI());
-            System.out.println("getRequestURL = " + req.getRequestURL());
-            System.out.println("getQueryString = " + req.getQueryString());
-            System.out.println("===========================================");
+//            System.out.println("===========================================");
+//            System.out.println("getContextPath = " + req.getContextPath());
+//            System.out.println("getServletPath = " + req.getServletPath());
+//            System.out.println("getPathTranslated = " + req.getPathTranslated());
+//            System.out.println("getPathInfo = " + req.getPathInfo());
+//            System.out.println("getRequestURI = " + req.getRequestURI());
+//            System.out.println("getRequestURL = " + req.getRequestURL());
+//            System.out.println("getQueryString = " + req.getQueryString());
+//            System.out.println("===========================================");
 
             // if we trying to open admin page but we are not admin ourself then go to 404
             if(ADMIN_PATHS.contains(req.getServletPath())) {

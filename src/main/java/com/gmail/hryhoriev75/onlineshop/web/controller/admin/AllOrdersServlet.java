@@ -17,17 +17,12 @@ import java.util.List;
 @WebServlet(name = "AllOrdersServlet", value = Path.ALL_ORDERS_PATH)
 public class AllOrdersServlet extends HttpServlet {
 
-    private static final String ORDERS_VIEW_PATH = "/WEB-INF/jsp/orders.jsp";
+    private static final String ORDERS_VIEW_PATH = "/WEB-INF/jsp/all_orders.jsp";
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        User user = RequestUtils.getSessionAttribute(request, "user", User.class);
-        if (user != null) {
-            List<Order> orders = OrderDAO.getOrdersByUserId(user.getId());
-            request.setAttribute("orders", orders);
-            request.getRequestDispatcher(ORDERS_VIEW_PATH).forward(request, response);
-            return;
-        }
-        request.getRequestDispatcher(Path.NOT_FOUND_PATH).forward(request, response);
+        List<Order> orders = OrderDAO.getAllOrders();
+        request.setAttribute("orders", orders);
+        request.getRequestDispatcher(ORDERS_VIEW_PATH).forward(request, response);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

@@ -16,14 +16,8 @@ public class LangFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-        if (request instanceof HttpServletRequest) {
-            HttpServletRequest req = (HttpServletRequest) request;
-            if(!req.getServletPath().contains("css") && !req.getServletPath().contains("js")) {
-                request.setCharacterEncoding("UTF-8");
-                response.setContentType("text/html; charset=UTF-8");
-                response.setCharacterEncoding("UTF-8");
-            }
-        }
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         HttpServletRequest req = (HttpServletRequest) request;
         String lang = getCookieValue(LANG_COOKIE_NAME, req);
         if(lang != null && (lang.equals(EN_LANG) || lang.equals(UK_LANG)))

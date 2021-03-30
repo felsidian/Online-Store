@@ -17,7 +17,7 @@ import java.util.List;
 @WebServlet(name = "UsersServlet", value = Path.USERS_PATH)
 public class UsersServlet extends HttpServlet {
 
-    private static final String ORDERS_VIEW_PATH = "/WEB-INF/jsp/orders.jsp";
+    private static final String ORDERS_VIEW_PATH = "/WEB-INF/jsp/all_users.jsp";
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         User user = RequestUtils.getSessionAttribute(request, "user", User.class);

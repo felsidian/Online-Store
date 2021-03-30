@@ -14,7 +14,10 @@ public class Path {
     public static final String ADD_PRODUCT_PATH = "/add-product";
     public static final String USERS_PATH = "/users";
     public static final String ALL_ORDERS_PATH = "/all-orders";
+    public static final String UPDATE_PATH = "/update";
 
     public static final String NOT_FOUND_PATH = "/WEB-INF/error404.jsp";
+
+    public static final String BLANK_IMAGE = "/assets/blank.png";
 
 }

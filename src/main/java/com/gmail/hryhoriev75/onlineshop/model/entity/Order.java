@@ -44,6 +44,10 @@ public class Order extends Entity {
             return super.toString().toLowerCase();
         }
 
+        public int getId() {
+            return ordinal();
+        }
+
         public String getStatus() {
             return toString();
         }

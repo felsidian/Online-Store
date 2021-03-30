@@ -63,7 +63,7 @@ public class AddProductServlet extends HttpServlet {
         product.setBrand(brand);
         product.setDescription(description);
         product.setCreateTime(new Date());
-        product.setImageUrl(imageUrl);
+        product.setImageUrl(imageUrl != null && !imageUrl.equals("") ? imageUrl: Path.BLANK_IMAGE);
         product.setPower(power);
         product.setWeight(weight);
         product.setCountry(country);

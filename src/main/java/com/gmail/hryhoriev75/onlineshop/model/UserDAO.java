@@ -25,7 +25,8 @@ public class UserDAO {
                      "LEFT JOIN role ON role_id=role.id WHERE user.id=?")) {
             pst.setLong(1, id);
             try (ResultSet rs = pst.executeQuery()) {
-                user = mapResultSet(rs);
+                if(rs.next())
+                    user = mapResultSet(rs);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

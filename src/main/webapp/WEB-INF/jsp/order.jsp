@@ -23,7 +23,31 @@
         <div class="col">
             <h4 class="my-4"><fmt:message key="orderN"/><c:out value="${requestScope.order.id}"/></h4>
             <h6 class="my-4"><fmt:message key="createDate"/>: <fmt:formatDate type="both" value="${requestScope.order.createTime}"/></h6>
-            <h6 class="my-4"><fmt:message key="status"/>: <fmt:message key="${requestScope.order.status}"/></h6>
+            <c:choose>
+                <c:when test="${sessionScope.user.role.admin}">
+                    <div class="row">
+                        <form action="${Path.UPDATE_PATH}" method="post">
+                            <input type="hidden" name="what" value="status">
+                            <input type="hidden" name="orderId" value="${requestScope.order.id}">
+                            <div class="col-3">
+                                <label for="status" class="form-label"><fmt:message key="status"/></label>
+                                <select class="form-select mb-4" id="status" name="statusId" aria-label="" required>
+                                    <option value="1" ${requestScope.order.status.id == 0 ? ' selected' : ''}><fmt:message key="CREATED"/></option>
+                                    <option value="2" ${requestScope.order.status.id == 1 ? ' selected' : ''}><fmt:message key="PAID"/></option>
+                                    <option value="3" ${requestScope.order.status.id == 2 ? ' selected' : ''}><fmt:message key="CANCELED"/></option>
+                                    <option value="4" ${requestScope.order.status.id == 3 ? ' selected' : ''}><fmt:message key="DONE"/></option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <button type="submit" class="btn btn-primary mb-3"><fmt:message key="updateStatus"/></button>
+                            </div>
+                        </form>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <h6 class="my-4"><fmt:message key="status"/>: <fmt:message key="${requestScope.order.status}"/></h6>
+                </c:otherwise>
+            </c:choose>
             <ul class="list-group" id="cart-list">
                 <c:forEach items="${requestScope.orderContent}" var="record">
                     <!--ITEM-->

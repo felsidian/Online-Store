@@ -1,6 +1,7 @@
 package com.gmail.hryhoriev75.onlineshop.web.controller;
 
 import com.gmail.hryhoriev75.onlineshop.model.OrderDAO;
+import com.gmail.hryhoriev75.onlineshop.model.UserDAO;
 import com.gmail.hryhoriev75.onlineshop.model.entity.Order;
 import com.gmail.hryhoriev75.onlineshop.model.entity.Product;
 import com.gmail.hryhoriev75.onlineshop.model.entity.User;
@@ -35,10 +36,12 @@ public class OrderServlet extends HttpServlet {
             return;
         }
         User user = RequestUtils.getSessionAttribute(request, "user", User.class);
-        if (user != null && order.getUserId() == user.getId()) {
+        if (user != null && (order.getUserId() == user.getId() || user.getRole().isAdmin())) {
             List<Order.Record> orderContent = OrderDAO.getOrderContent(order.getId());
+            User orderOwner = UserDAO.findUserById(order.getUserId());
             request.setAttribute("orderContent", orderContent);
             request.setAttribute("order", order);
+            request.setAttribute("orderOwner", orderOwner);
             request.getRequestDispatcher(ORDER_VIEW_PATH).forward(request, response);
             return;
         }
