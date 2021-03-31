@@ -14,18 +14,22 @@
     <form action="${Path.SIGNUP_PATH}" method="post">
         <div class="container">
             <label for="email"><b><fmt:message key="email"/></b></label>
-            <input type="email" placeholder="<fmt:message key="email"/>" id="email" name="email" required value="<c:out value="${email}" default="" />">
+            <input type="email" class="inp" placeholder="<fmt:message key="email"/>" id="email" name="email" required value="<c:out value="${requestScope.email}" default="" />">
 
             <label for="password"><b><fmt:message key="password"/></b></label>
-            <input type="password" placeholder="<fmt:message key="enterPassword"/>" id="password" name="password" minlength="8" maxlength="64" required >
+            <input type="password" class="inp" placeholder="<fmt:message key="enterPassword"/>" id="password" name="password" minlength="8" maxlength="64" required >
 
             <label for="name"><b><fmt:message key="name"/></b></label>
-            <input type="text" placeholder="<fmt:message key="enterName"/>" id="name" name="name" required value="<c:out value="${name}" default="" />">
+            <input type="text" class="inp" placeholder="<fmt:message key="enterName"/>" id="name" name="name" required value="<c:out value="${requestScope.name}" default="" />">
 
-            <label for="phoneNumber"><b><fmt:message key="phoneNumber"/></b></label>
-            <input type="tel" placeholder="<fmt:message key="enterPhoneNumber"/>" id="phoneNumber" name="phoneNumber" value="<c:out value="${phoneNumber}" default="" />">
+<%--            <label for="phoneNumber"><b><fmt:message key="phoneNumber"/></b></label>--%>
+<%--            <input type="tel" placeholder="<fmt:message key="enterPhoneNumber"/>" id="phoneNumber" name="phoneNumber" value="<c:out value="${phoneNumber}" default="" />">--%>
 
-            <div style="color:red; text-align: center;"><c:out value="${error}" /></div>
+            <c:choose>
+                <c:when test="${requestScope.error != null}">
+                    <div style="color:red; text-align: center;"><fmt:message key="${requestScope.error}"/></div>
+                </c:when>
+            </c:choose>
 
             <button type="submit"><fmt:message key="signup"/></button>
         </div>

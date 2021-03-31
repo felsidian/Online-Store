@@ -15,16 +15,20 @@
         <form action="${Path.LOGIN_PATH}" method="post">
             <div class="container">
                 <label for="email"><b><fmt:message key="email"/></b></label>
-                <input type="email" placeholder="<fmt:message key="enterEmail"/>" id="email" name="email" required value="<c:out value="${email}" default="" />">
+                <input type="email" class="inp" placeholder="<fmt:message key="enterEmail"/>" id="email" name="email" required value="<c:out value="${requestScope.email}" default="" />">
 
                 <label for="password"><b><fmt:message key="password"/></b></label>
-                <input type="password" placeholder="<fmt:message key="enterPassword"/>" id="password" name="password" minlength="8" maxlength="64" required>
+                <input type="password" class="inp" placeholder="<fmt:message key="enterPassword"/>" id="password" name="password" minlength="8" maxlength="64" required>
 
-                <div style="color:red; text-align: center;"><c:out value="${error}" /></div>
+                <c:choose>
+                    <c:when test="${requestScope.error != null}">
+                        <div style="color:red; text-align: center;"><fmt:message key="${requestScope.error}"/></div>
+                    </c:when>
+                </c:choose>
 
                 <button type="submit"><fmt:message key="login"/></button>
                 <label>
-                    <input type="checkbox" name="remember" <c:out value="${remember}" />> <fmt:message key="remember"/>
+                    <input type="checkbox" name="remember" <c:out value="${requestScope.remember}" />> <fmt:message key="remember"/>
                 </label>
             </div>
 
