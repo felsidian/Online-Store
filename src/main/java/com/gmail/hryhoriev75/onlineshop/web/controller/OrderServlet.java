@@ -18,6 +18,12 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller for order page
+ * In case of get request method shows order information if user are logged in and user is owner of the order
+ * Order specifying via request parameter (?id=XXX)
+ * In case of post request method creating new order via parsing "cart" request parameter
+ */
 @WebServlet(name = "OrderServlet", value = Path.ORDER_PATH)
 public class OrderServlet extends HttpServlet {
 

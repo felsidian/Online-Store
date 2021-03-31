@@ -14,6 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Controller for all orders page
+ * Available only for admin
+ */
 @WebServlet(name = "AllOrdersServlet", value = Path.ALL_ORDERS_PATH)
 public class AllOrdersServlet extends HttpServlet {
 

@@ -1,21 +1,22 @@
 package com.gmail.hryhoriev75.onlineshop.web.controller;
 
-import com.gmail.hryhoriev75.onlineshop.model.OrderDAO;
 import com.gmail.hryhoriev75.onlineshop.model.ProductDAO;
-import com.gmail.hryhoriev75.onlineshop.model.entity.Order;
 import com.gmail.hryhoriev75.onlineshop.model.entity.Product;
 import com.gmail.hryhoriev75.onlineshop.web.Path;
 import com.gmail.hryhoriev75.onlineshop.web.utils.RequestUtils;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
+/**
+ * Controller for product page
+ * Product specifying via request parameter (?id=XXX)
+ * Shows product information and add to cart button
+ */
 @WebServlet(name = "ProductServlet", value = Path.PRODUCT_PATH)
 public class ProductServlet extends HttpServlet {
 

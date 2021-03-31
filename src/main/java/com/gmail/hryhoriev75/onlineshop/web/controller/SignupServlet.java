@@ -1,5 +1,6 @@
 package com.gmail.hryhoriev75.onlineshop.web.controller;
 
+import com.gmail.hryhoriev75.onlineshop.Constants;
 import com.gmail.hryhoriev75.onlineshop.model.UserDAO;
 import com.gmail.hryhoriev75.onlineshop.model.entity.User;
 import com.gmail.hryhoriev75.onlineshop.security.Security;
@@ -17,6 +18,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Signup page controller
+ * Retrieves credentials from request and validate them.
+ * If error pass them back to JSP view. Otherwise adding user to Db, creating session and redirecting him to main page
+ */
 @WebServlet(name = "SignupServlet", value = Path.SIGNUP_PATH)
 public class SignupServlet extends HttpServlet {
 
@@ -48,7 +54,6 @@ public class SignupServlet extends HttpServlet {
         String name = request.getParameter("name");
         String phoneNumber = request.getParameter("phoneNumber");
 
-
         // filling map with parameters which will be passed to the view
         Map<String, String> viewAttributes = new HashMap<>();
         viewAttributes.put("email", email);
@@ -56,29 +61,29 @@ public class SignupServlet extends HttpServlet {
         viewAttributes.put("phoneNumber", phoneNumber);
 
         if(!Security.isEmailValid(email)) {
-            viewAttributes.put("error", "Email isn't valid");
+            viewAttributes.put("error", Constants.EMAIL_NOT_VALID);
             passErrorToView(request, response, viewAttributes);
             return;
         }
         if(!Security.isPasswordValid(password)) {
-            viewAttributes.put("error", "Password isn't valid");
+            viewAttributes.put("error", Constants.PASSWORD_NOT_VALID);
             passErrorToView(request, response, viewAttributes);
             return;
         }
         if(name == null || name.isBlank()) {
-            viewAttributes.put("error", "Name isn't valid");
+            viewAttributes.put("error", Constants.NAME_NOT_VALID);
             passErrorToView(request, response, viewAttributes);
             return;
         }
         if(phoneNumber != null && !Security.isPhoneValid(phoneNumber)) {
-            viewAttributes.put("error", "Phone number isn't valid");
+            viewAttributes.put("error", Constants.PHONE_NOT_VALID);
             passErrorToView(request, response, viewAttributes);
             return;
         }
         // all request parameters are valid
 
         if(UserDAO.findUserByEmail(email) != null) {
-            viewAttributes.put("error", "User with this email already exists");
+            viewAttributes.put("error", Constants.EMAIL_EXISTS);
             passErrorToView(request, response, viewAttributes);
             return;
         }
@@ -86,13 +91,12 @@ public class SignupServlet extends HttpServlet {
         // lets create user in DB and make him logged in
         boolean userAdded = false;
         try {
-            UserDAO.addUser(email, Security.hashPassword(password), name, phoneNumber, "uk");
-            userAdded = true;
+            userAdded = UserDAO.addUser(email, Security.hashPassword(password), name, phoneNumber, "uk");
         } catch (Exception e) {
             e.printStackTrace();
         }
         if(!userAdded) {
-            viewAttributes.put("error", "Something went wrong. Please try again");
+            viewAttributes.put("error", Constants.OTHER_ERROR);
             passErrorToView(request, response, viewAttributes);
         } else {
             User user = UserDAO.findUserByEmail(email);
@@ -107,8 +111,7 @@ public class SignupServlet extends HttpServlet {
     private void passErrorToView(HttpServletRequest request, HttpServletResponse response, Map<String, String> viewAttributes) throws ServletException, IOException {
         for(Map.Entry<String, String> entry : viewAttributes.entrySet())
             request.setAttribute(entry.getKey(), entry.getValue());
-        RequestDispatcher disp = request.getRequestDispatcher(SIGNUP_VIEW_PATH);
-        disp.forward(request, response);
+        request.getRequestDispatcher(SIGNUP_VIEW_PATH).forward(request, response);
     }
 
 }

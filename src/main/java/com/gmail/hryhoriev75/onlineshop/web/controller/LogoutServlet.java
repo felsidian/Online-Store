@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Logout controller
+ * Just invalidates session and redirect to main page
+ */
 @WebServlet(name = "LogoutServlet", value = Path.LOGOUT_PATH)
 public class LogoutServlet extends HttpServlet {
 

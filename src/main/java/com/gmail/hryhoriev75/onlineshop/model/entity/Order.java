@@ -6,6 +6,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Describes Order's entity
+ * Nested class Record describes each position of order contains
+ */
 public class Order extends Entity {
 
     private long userId;
@@ -53,6 +57,9 @@ public class Order extends Entity {
         }
     }
 
+    /*
+     * Each position of Order is described by this class
+     */
     public static class Record {
 
         private Product product;

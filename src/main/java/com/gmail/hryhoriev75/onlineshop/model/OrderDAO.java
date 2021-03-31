@@ -10,21 +10,25 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data access object for Order entity
+ */
 public class OrderDAO {
 
     private static final String TABLE_STATUS = "status";
-    private static final String TABLE_USER = "user";
     private static final String TABLE_ORDER_CONTENT = "order_content";
-
     private static final String FIELD_ID = "id";
     private static final String FIELD_USER_ID = "user_id";
     private static final String FIELD_NAME = "name";
-    private static final String FIELD_EMAIL = "email";
     private static final String FIELD_CREATE_TIME = "create_time";
     private static final String FIELD_PRICE = "price";
     private static final String FIELD_IMAGE_URL = "image_url";
     private static final String FIELD_QUANTITY = "quantity";
 
+    /**
+     * @param id Order identifier
+     * @return Order entity or null if wasn't found
+     */
     public static Order findOrderById(long id) {
         Order order = null;
         try (Connection con = DBHelper.getInstance().getConnection();
@@ -41,6 +45,14 @@ public class OrderDAO {
         return order;
     }
 
+    /**
+     * Creating new order made by user with given id
+     *
+     * @param userId User identifier
+     * @param createTime Time when order was created
+     * @param orderContent List of records order consists of
+     * @return Order id if order was successfully created, 0 otherwise
+     */
     public static long createOrder(long userId, Instant createTime, List<Order.Record> orderContent) {
         long orderId = addOrder(userId, createTime, Order.Status.CREATED);
         if (orderId > 0) {
@@ -49,6 +61,11 @@ public class OrderDAO {
         return orderId;
     }
 
+    /**
+     * Creating new order
+     *
+     * @return Order id if order was successfully created, 0 otherwise
+     */
     private static long addOrder(long userId, Instant createTime, Order.Status status) {
         long orderId = 0;
         try (Connection con = DBHelper.getInstance().getConnection();
@@ -72,8 +89,10 @@ public class OrderDAO {
         return orderId;
     }
 
-    private static boolean addOrderContent(long orderId, List<Order.Record> orderContent) {
-        boolean result = false;
+    /**
+     * Adding list of records order consists of to DB
+     */
+    private static void addOrderContent(long orderId, List<Order.Record> orderContent) {
         try (Connection con = DBHelper.getInstance().getConnection();
              PreparedStatement pst = con.prepareStatement("INSERT INTO order_content(order_id,product_id,quantity,price)" +
                      "VALUES(?,?,?,(SELECT price FROM product WHERE id=? LIMIT 1))")) {
@@ -84,13 +103,17 @@ public class OrderDAO {
                 pst.setLong(4, record.getProduct().getId());
                 pst.addBatch();
             }
-            result = pst.executeBatch().length > 0;
+            pst.executeBatch();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return result;
     }
 
+    /**
+     * Returns list of records order with given id consists of
+     *
+     * @return List of Order.Record items. If any present returns empty list.
+     */
     public static List<Order.Record> getOrderContent(long orderId) {
         List<Order.Record> orderContent = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
@@ -107,6 +130,11 @@ public class OrderDAO {
         return orderContent;
     }
 
+    /**
+     * Returns list of orders user with given id made
+     *
+     * @return List of Order entities. If any present returns empty list.
+     */
     public static List<Order> getOrdersByUserId(long orderId) {
         List<Order> orders = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
@@ -124,6 +152,11 @@ public class OrderDAO {
         return orders;
     }
 
+    /**
+     * Returns list of all orders
+     *
+     * @return List of Order entities. If any present returns empty list.
+     */
     public static List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
@@ -140,6 +173,9 @@ public class OrderDAO {
         return orders;
     }
 
+    /**
+     * Updates status of order with given id
+     */
     public static void updateStatus(long orderId, int statusId) {
         try (Connection con = DBHelper.getInstance().getConnection();
              PreparedStatement pst = con.prepareStatement("UPDATE `order` SET status_id=? WHERE id=?")) {
@@ -151,6 +187,9 @@ public class OrderDAO {
         }
     }
 
+    /**
+     * Extracts Order entity from the result set row.
+     */
     private static Order mapOrder(ResultSet rs) {
         Order order = null;
         try {
@@ -166,6 +205,9 @@ public class OrderDAO {
         return order;
     }
 
+    /**
+     * Extracts Order.Record from the result set row.
+     */
     private static Order.Record mapOrderContent(ResultSet rs) {
         Order.Record record = null;
         try {

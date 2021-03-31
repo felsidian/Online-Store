@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Access restriction filter
+ */
 @WebFilter("/*")
 public class LoginFilter implements Filter {
 
@@ -21,15 +24,6 @@ public class LoginFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         if (request instanceof HttpServletRequest) {
             HttpServletRequest req = (HttpServletRequest) request;
-//            System.out.println("===========================================");
-//            System.out.println("getContextPath = " + req.getContextPath());
-//            System.out.println("getServletPath = " + req.getServletPath());
-//            System.out.println("getPathTranslated = " + req.getPathTranslated());
-//            System.out.println("getPathInfo = " + req.getPathInfo());
-//            System.out.println("getRequestURI = " + req.getRequestURI());
-//            System.out.println("getRequestURL = " + req.getRequestURL());
-//            System.out.println("getQueryString = " + req.getQueryString());
-//            System.out.println("===========================================");
 
             // if we trying to open admin page but we are not admin ourself then go to 404
             if(ADMIN_PATHS.contains(req.getServletPath())) {

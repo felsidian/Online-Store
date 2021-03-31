@@ -1,12 +1,12 @@
 package com.gmail.hryhoriev75.onlineshop.web.controller;
 
+import com.gmail.hryhoriev75.onlineshop.Constants;
 import com.gmail.hryhoriev75.onlineshop.model.UserDAO;
 import com.gmail.hryhoriev75.onlineshop.model.entity.User;
 import com.gmail.hryhoriev75.onlineshop.security.Security;
 import com.gmail.hryhoriev75.onlineshop.web.Path;
 import com.gmail.hryhoriev75.onlineshop.web.utils.RequestUtils;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +19,11 @@ import java.util.Map;
 
 import static com.gmail.hryhoriev75.onlineshop.web.Path.LOGIN_PATH;
 
+/**
+ * Login page controller
+ * Retrieves credentials from request and validate them.
+ * If error pass them back to JSP view. Otherwise creating session for user and redirecting him to main page
+ */
 @WebServlet(name = "LoginServlet", value = LOGIN_PATH)
 public class LoginServlet extends HttpServlet {
 
@@ -30,8 +35,7 @@ public class LoginServlet extends HttpServlet {
             // if we somehow opened /login page while being already logged in, we just do redirect to catalog (/)
             response.sendRedirect(Path.CATALOG_PATH);
         } else {
-            RequestDispatcher disp = request.getRequestDispatcher(LOGIN_VIEW_PATH);
-            disp.forward(request, response);
+            request.getRequestDispatcher(LOGIN_VIEW_PATH).forward(request, response);
         }
     }
 
@@ -55,12 +59,12 @@ public class LoginServlet extends HttpServlet {
         viewAttributes.put("remember", remember);
 
         if(!Security.isEmailValid(email)) {
-            viewAttributes.put("error", "Email isn't valid");
+            viewAttributes.put("error", Constants.EMAIL_NOT_VALID);
             passErrorToView(request, response, viewAttributes);
             return;
         }
         if(!Security.isPasswordValid(password)) {
-            viewAttributes.put("error", "Password isn't valid");
+            viewAttributes.put("error", Constants.PASSWORD_NOT_VALID);
             passErrorToView(request, response, viewAttributes);
             return;
         }
@@ -69,18 +73,18 @@ public class LoginServlet extends HttpServlet {
         // trying to identify and authenticate user
         User user = UserDAO.findUserByEmail(email);
         if(user == null) {
-            viewAttributes.put("error", "User with this email wasn't found");
+            viewAttributes.put("error", Constants.USER_NOT_FOUND);
             passErrorToView(request, response, viewAttributes);
             return;
         }
         try {
             if(!Security.isPasswordCorrect(password, user.getPassword())) {
-                viewAttributes.put("error", "Wrong password");
+                viewAttributes.put("error", Constants.WRONG_PASSWORD);
                 passErrorToView(request, response, viewAttributes);
                 return;
             }
         } catch (Exception e) {
-            viewAttributes.put("error", "Wrong password");
+            viewAttributes.put("error", Constants.WRONG_PASSWORD);
             passErrorToView(request, response, viewAttributes);
             return;
         }
@@ -89,7 +93,6 @@ public class LoginServlet extends HttpServlet {
         // lets put him into session and redirect to catalog (/)
         HttpSession session = request.getSession(true);
         session.setAttribute("user", user);
-        //session.setAttribute("roleName", user.getRoleName());
         if("".equals(remember))
             session.setMaxInactiveInterval(1800); // 30 minutes
         else

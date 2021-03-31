@@ -1,5 +1,8 @@
 package com.gmail.hryhoriev75.onlineshop.model.entity;
 
+/*
+ * Unused Entity describing each product parameter
+ */
 public class Parameter extends Entity {
 
 //    private String name;

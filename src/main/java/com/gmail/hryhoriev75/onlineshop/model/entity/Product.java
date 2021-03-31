@@ -5,6 +5,9 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
 
+/**
+ * Describes Product's entity
+ */
 public class Product extends Entity {
 
     private String name;

@@ -1,5 +1,8 @@
 package com.gmail.hryhoriev75.onlineshop.web.utils;
 
+/**
+ * Custom JSP Tag with function
+ */
 public class CustomTagLibrary {
 
     public static boolean contains(String[] list, String s) {
@@ -11,10 +14,6 @@ public class CustomTagLibrary {
             }
         }
         return false;
-    }
-
-    public static boolean contains(java.util.List<String> list, String s) {
-        return list != null && s != null && list.contains(s);
     }
 
 }

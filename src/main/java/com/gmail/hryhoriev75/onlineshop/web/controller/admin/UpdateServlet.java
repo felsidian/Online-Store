@@ -15,6 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Service controller for updating entities
+ * Available only for admin
+ */
 @WebServlet(name = "UpdateServlet", value = Path.UPDATE_PATH)
 public class UpdateServlet extends HttpServlet {
 
@@ -25,6 +29,7 @@ public class UpdateServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String what = RequestUtils.getStringParameter(request, "what");
         if ("status".equals(what)) {
+            // if status parameter were sent updating order's status
             int statusId = RequestUtils.getIntParameter(request, "statusId");
             long orderId = RequestUtils.getLongParameter(request, "orderId");
             if (statusId > 0 && statusId <= 4 && orderId > 0) {
@@ -33,14 +38,6 @@ public class UpdateServlet extends HttpServlet {
                 return;
             }
         }
-//        else if ("block".equals(what)) {
-//            int blocked = RequestUtils.getIntParameter(request, "blocked");
-//            long userId = RequestUtils.getLongParameter(request, "userId");
-//            if (userId > 0) {
-//                UserDAO.updateBlock(userId, blocked != 0);
-//                response.sendRedirect(Path.ORDER_PATH + "?id=" + orderId);
-//            }
-//        }
         response.sendRedirect(Path.CATALOG_PATH);
     }
 

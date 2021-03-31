@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 /**
  * Singleton which helps to get DB connections using Hikari Connection Pooling
+ * Use getInstance() method to get access
  */
 public class DBHelper {
 
@@ -22,6 +23,7 @@ public class DBHelper {
         String userName = System.getProperty("RDS_USERNAME");
         String password = System.getProperty("RDS_PASSWORD");
 
+        //configuring db connection and pooling with recommended params
         HikariConfig config = new HikariConfig();
         config.setDriverClassName("com.mysql.cj.jdbc.Driver");
         config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + dbName);

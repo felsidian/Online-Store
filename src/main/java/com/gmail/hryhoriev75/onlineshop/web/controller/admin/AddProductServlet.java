@@ -21,6 +21,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Add or edit product page controller
+ * Available only for admin
+ * In case of get request method shows either a blank form ot filled form for editing
+ * Product specifying via request parameter (?id=XXX)
+ * In case of post request method validating parameters and updating product info or acreating a new one
+ * If error pass them back to JSP view
+ */
 @WebServlet(name = "AddProductServlet", value = Path.ADD_PRODUCT_PATH)
 public class AddProductServlet extends HttpServlet {
 

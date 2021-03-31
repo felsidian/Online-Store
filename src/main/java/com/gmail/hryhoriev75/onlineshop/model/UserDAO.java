@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Data access object for User entity
+ */
 public class UserDAO {
 
     private static final String FIELD_ID = "id";
@@ -18,6 +21,10 @@ public class UserDAO {
     private static final String FIELD_BLOCKED = "blocked";
     private static final String FIELD_ROLE_NAME = "role_name";
 
+    /**
+     * @param id User identifier
+     * @return User entity or null if wasn't found
+     */
     public static User findUserById(long id) {
         User user = null;
         try (Connection con = DBHelper.getInstance().getConnection();
@@ -34,6 +41,10 @@ public class UserDAO {
         return user;
     }
 
+    /**
+     * @param email User's email
+     * @return User entity or null if wasn't found
+     */
     public static User findUserByEmail(String email) {
         User user = null;
         try (Connection con = DBHelper.getInstance().getConnection();
@@ -50,6 +61,10 @@ public class UserDAO {
         return user;
     }
 
+    /**
+     * Adding user to DB with given parameters
+     * @return true if User was successfully added, false otherwise
+     */
     public static boolean addUser(String email, String password, String name, String phoneNumber, String locale) {
         boolean result = false;
         try (Connection con = DBHelper.getInstance().getConnection();
@@ -70,19 +85,22 @@ public class UserDAO {
         return result;
     }
 
+    /**
+     * Extracts User from the result set row.
+     */
     private static User mapResultSet(ResultSet rs) {
         User user = null;
         try {
-                user = new User();
-                user.setId(rs.getLong(FIELD_ID));
-                user.setName(rs.getString(FIELD_NAME));
-                user.setEmail(rs.getString(FIELD_EMAIl));
-                user.setPassword(rs.getString(FIELD_PASSWORD));
-                user.setPhoneNumber(rs.getString(FIELD_PHONE_NUMBER));
-                user.setRole(User.Role.valueOf(rs.getString(FIELD_ROLE_NAME).toUpperCase()));
-                user.setBlocked(rs.getBoolean(FIELD_BLOCKED));
+            user = new User();
+            user.setId(rs.getLong(FIELD_ID));
+            user.setName(rs.getString(FIELD_NAME));
+            user.setEmail(rs.getString(FIELD_EMAIl));
+            user.setPassword(rs.getString(FIELD_PASSWORD));
+            user.setPhoneNumber(rs.getString(FIELD_PHONE_NUMBER));
+            user.setRole(User.Role.valueOf(rs.getString(FIELD_ROLE_NAME).toUpperCase()));
+            user.setBlocked(rs.getBoolean(FIELD_BLOCKED));
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
         return user;
     }

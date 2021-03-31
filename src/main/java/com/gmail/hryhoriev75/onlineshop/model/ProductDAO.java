@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Data access object for Product entity
+ */
 public class ProductDAO {
 
     private static final String TABLE_CATEGORY = "category";
-
     private static final String FIELD_ID = "id";
     private static final String FIELD_NAME = "name";
     private static final String FIELD_BRAND = "brand";
@@ -22,16 +24,22 @@ public class ProductDAO {
     private static final String FIELD_CREATE_TIME = "create_time";
     private static final String FIELD_PRICE = "price";
     private static final String FIELD_IMAGE_URL = "image_url";
-    private static final String FIELD_CATEGORY_ID = "category_id";
     private static final String FIELD_POWER = "power";
     private static final String FIELD_WEIGHT = "weight";
     private static final String FIELD_COUNTRY = "country";
 
+    // Maps sorting parameter with corresponding column name
     private static final Map<String, String> COLUMN_TO_SORT_MAP = Map.of(Constants.SORT_A_Z, "name", Constants.SORT_Z_A, "name",
             Constants.SORT_CHEAP_FIRST, "price", Constants.SORT_EXPENSIVE_FIRST, "price", Constants.SORT_NEW_FIRST, "id");
+
+    // Maps sorting parameter with corresponding order
     private static final Map<String, String> SORT_DIRECTION_MAP = Map.of(Constants.SORT_A_Z, "ASC", Constants.SORT_Z_A, "DESC",
             Constants.SORT_CHEAP_FIRST, "ASC", Constants.SORT_EXPENSIVE_FIRST, "DESC", Constants.SORT_NEW_FIRST, "DESC");
 
+    /**
+     * @param id Product identifier
+     * @return Product entity or null if wasn't found
+     */
     public static Product findProductById(long id) {
         Product product = null;
         try (Connection con = DBHelper.getInstance().getConnection();
@@ -49,6 +57,12 @@ public class ProductDAO {
         return product;
     }
 
+    /**
+     * Returns list of most popular products (which were bought more often)
+     *
+     * @param limit Maximum count of products to return
+     * @return List of Product entities
+     */
     public static List<Product> getPopularProducts(long limit) {
         List<Product> products = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
@@ -66,6 +80,9 @@ public class ProductDAO {
         return products;
     }
 
+    /**
+     * @return List of all Category entities
+     */
     public static List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
@@ -80,11 +97,16 @@ public class ProductDAO {
         return categories;
     }
 
-    public static List<String> getBrandsByCategory(long id) {
+
+    /**
+     * @param categoryId Category identifier
+     * @return List of all product's brands given category contains
+     */
+    public static List<String> getBrandsByCategory(long categoryId) {
         List<String> brands = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
              PreparedStatement pst = con.prepareStatement("SELECT brand FROM product WHERE category_id = ? GROUP BY brand")) {
-             pst.setLong(1, id);
+             pst.setLong(1, categoryId);
              try (ResultSet rs = pst.executeQuery()) {
                  while (rs.next()) {
                      brands.add(rs.getString(1));
@@ -96,6 +118,12 @@ public class ProductDAO {
         return brands;
     }
 
+    /**
+     * Returns list of products (which are satisfy all the filters given by parameters)
+     *
+     * @param sort Sort constant from Constants class
+     * @return List of Product entities. If any present returns empty list.
+     */
     public static List<Product> getAllProductsByCategory(Category category, String sort, BigDecimal priceFrom, BigDecimal priceTo, List<String> brandList, int offset, int limit) {
         List<Product> list = new ArrayList<>(limit);
         String priceCause= "";
@@ -105,7 +133,7 @@ public class ProductDAO {
             priceCause += " price <= " + priceTo + " AND ";
         StringBuilder brandCause = new StringBuilder();
         if(!brandList.isEmpty()) {
-            brandCause.append(" brand IN('" + brandList.get(0) + "'");
+            brandCause.append(" brand IN('").append(brandList.get(0)).append("'");
         }
         for (int i = 1; i < brandList.size(); i++) {
             brandCause.append(",'").append(brandList.get(i)).append("'");
@@ -133,6 +161,10 @@ public class ProductDAO {
         return list;
     }
 
+    /**
+     * @param id Category identifier
+     * @return Category entity or null if wasn't found
+     */
     public static Category findCategoryById(long id) {
         Category category = null;
         try (Connection con = DBHelper.getInstance().getConnection();
@@ -149,8 +181,15 @@ public class ProductDAO {
         return category;
     }
 
+    /**
+     * Adding or editing existing Product
+     *
+     * @param product Product entity. If product.getId() > 0, then product will be updated. Otherwise new Product will be created
+     * @return Product id if it was successfully added or updated, 0 otherwise
+     */
     public static long addOrUpdateProduct(Product product) {
         long productId = 0;
+        // Since insert and update SQL queries are similar, we preparing statement in one line
         String insertSql = "INSERT INTO product(name,brand,description,create_time," +
                 "price,image_url,category_id,power,weight,country)VALUES(?,?,?,?,?,?,?,?,?,?)";
         String updateSql = "UPDATE product SET name=?,brand=?,description=?,create_time=?," +
@@ -185,7 +224,10 @@ public class ProductDAO {
         return productId;
     }
 
-
+    /**
+     * Extracts Product and Category from the result set row.
+     * @return Product entity with Category set
+     */
     private static Product mapProductAndCategory(ResultSet rs) throws SQLException {
         Product product = mapProduct(rs);
         Category category = mapCategory(rs);
@@ -193,6 +235,9 @@ public class ProductDAO {
         return product;
     }
 
+    /**
+     * Extracts Product from the result set row.
+     */
     private static Product mapProduct(ResultSet rs) throws SQLException {
         Product product = new Product();
         product.setId(rs.getLong(FIELD_ID));
@@ -208,6 +253,9 @@ public class ProductDAO {
         return product;
     }
 
+    /**
+     * Extracts Category from the result set row.
+     */
     private static Category mapCategory(ResultSet rs) throws SQLException {
         Category category = new Category();
         category.setId(rs.getLong(TABLE_CATEGORY + "." + FIELD_ID));

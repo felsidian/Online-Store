@@ -1,7 +1,8 @@
 package com.gmail.hryhoriev75.onlineshop.model.entity;
 
-import java.util.Objects;
-
+/**
+ * Basic class for every model entity
+ */
 public abstract class Entity {
 
     private long id;

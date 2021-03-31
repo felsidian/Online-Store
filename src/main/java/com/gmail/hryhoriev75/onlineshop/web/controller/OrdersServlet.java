@@ -18,6 +18,11 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller for user's orders page
+ * Available only for logged in users
+ * Otherwise redirects to error page
+ */
 @WebServlet(name = "OrdersServlet", value = Path.ORDERS_PATH)
 public class OrdersServlet extends HttpServlet {
 

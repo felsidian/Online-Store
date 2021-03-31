@@ -6,6 +6,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+/**
+ * Servlet Context Listener
+ */
 @WebListener
 public class ContextListener implements ServletContextListener {
 

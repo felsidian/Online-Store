@@ -1,5 +1,8 @@
 package com.gmail.hryhoriev75.onlineshop.model.entity;
 
+/**
+ * Describes Category's entity
+ */
 public class Category extends Entity {
 
     private String name;

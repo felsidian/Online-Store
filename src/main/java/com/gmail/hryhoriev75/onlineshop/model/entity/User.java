@@ -1,8 +1,8 @@
 package com.gmail.hryhoriev75.onlineshop.model.entity;
 
-import java.util.List;
-import java.util.Objects;
-
+/**
+ * Describes User's entity
+ */
 public class User extends Entity {
 
     private String name;

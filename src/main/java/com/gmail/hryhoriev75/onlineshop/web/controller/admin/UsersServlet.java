@@ -14,7 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "UsersServlet", value = Path.USERS_PATH)
+/**
+ * Controller for all users page
+ * Available only for admin
+ */
+//@WebServlet(name = "UsersServlet", value = Path.USERS_PATH)
 public class UsersServlet extends HttpServlet {
 
     private static final String ORDERS_VIEW_PATH = "/WEB-INF/jsp/all_users.jsp";
