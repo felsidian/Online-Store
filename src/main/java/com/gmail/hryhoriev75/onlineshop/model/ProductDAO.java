@@ -49,15 +49,15 @@ public class ProductDAO {
         return product;
     }
 
-    public static List<Product> getProducts(long limit) {
+    public static List<Product> getPopularProducts(long limit) {
         List<Product> products = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT * FROM product LEFT JOIN category " +
-                     "ON category_id=category.id ORDER BY product.id DESC LIMIT ?")) {
+             PreparedStatement pst = con.prepareStatement("SELECT *, COUNT(*) as count FROM order_content JOIN product " +
+                     "ON product_id=product.id GROUP BY product_id ORDER BY count DESC LIMIT ?")) {
             pst.setLong(1, limit);
             try(ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    products.add(mapProductAndCategory(rs));
+                    products.add(mapProduct(rs));
                 }
             }
         } catch (SQLException ex) {
@@ -80,14 +80,46 @@ public class ProductDAO {
         return categories;
     }
 
-    public static List<Product> getAllProductsByCategory(Category category, String sort, long offset, long limit) {
-        List<Product> list = new ArrayList<>((int)limit);
+    public static List<String> getBrandsByCategory(long id) {
+        List<String> brands = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT * FROM product WHERE category_id=? ORDER BY " +
+             PreparedStatement pst = con.prepareStatement("SELECT brand FROM product WHERE category_id = ? GROUP BY brand")) {
+             pst.setLong(1, id);
+             try (ResultSet rs = pst.executeQuery()) {
+                 while (rs.next()) {
+                     brands.add(rs.getString(1));
+                 }
+             }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return brands;
+    }
+
+    public static List<Product> getAllProductsByCategory(Category category, String sort, BigDecimal priceFrom, BigDecimal priceTo, List<String> brandList, int offset, int limit) {
+        List<Product> list = new ArrayList<>(limit);
+        String priceCause= "";
+        if(priceFrom != null)
+            priceCause += " price >= " + priceFrom + " AND ";
+        if(priceTo != null)
+            priceCause += " price <= " + priceTo + " AND ";
+        StringBuilder brandCause = new StringBuilder();
+        if(!brandList.isEmpty()) {
+            brandCause.append(" brand IN('" + brandList.get(0) + "'");
+        }
+        for (int i = 1; i < brandList.size(); i++) {
+            brandCause.append(",'").append(brandList.get(i)).append("'");
+        }
+        if(!brandList.isEmpty()) {
+            brandCause.append(") AND ");
+        }
+
+        try (Connection con = DBHelper.getInstance().getConnection();
+             PreparedStatement pst = con.prepareStatement("SELECT * FROM product WHERE " + priceCause + brandCause + " category_id=? ORDER BY " +
                      COLUMN_TO_SORT_MAP.get(sort) + " " + SORT_DIRECTION_MAP.get(sort) + " LIMIT ?, ?")) {
             pst.setLong(1, category.getId());
-            pst.setLong(2, offset);
-            pst.setLong(3, limit);
+            pst.setInt(2, offset);
+            pst.setInt(3, limit);
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     Product product = mapProduct(rs);

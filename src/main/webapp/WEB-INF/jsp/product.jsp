@@ -72,7 +72,7 @@
                     <c:choose>
                         <c:when test="${requestScope.product.country != null && requestScope.product.country ne ''}">
                             <tr>
-                                <th scope="row"><fmt:message key="brand"/></th>
+                                <th scope="row"><fmt:message key="country"/></th>
                                 <td><c:out value="${requestScope.product.country}"/></td>
                             </tr>
                         </c:when>
@@ -81,7 +81,7 @@
             </table>
         </div>
         <div class="w-100"></div>
-        <div class="col-sm mt-2">
+        <div class="col-sm my-2">
             <div class="card">
                 <div class="card-body">
                     <c:out value="${requestScope.product.description}"/>

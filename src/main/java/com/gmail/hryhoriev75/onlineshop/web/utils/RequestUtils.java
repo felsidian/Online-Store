@@ -1,16 +1,13 @@
 package com.gmail.hryhoriev75.onlineshop.web.utils;
 
-import com.gmail.hryhoriev75.onlineshop.model.OrderDAO;
-import com.gmail.hryhoriev75.onlineshop.model.entity.Order;
-import com.gmail.hryhoriev75.onlineshop.model.entity.User;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+/*
+ * Helper class to manipulate with HttpServletRequest
+ */
 public class RequestUtils {
 
     // returns parameter value or 0 if there is no such parameter or it's not a long number
@@ -26,8 +23,8 @@ public class RequestUtils {
     public static BigDecimal getBigDecimalParameter(HttpServletRequest request, String parameterName) {
         try {
             return new BigDecimal(request.getParameter(parameterName));
-        } catch(NumberFormatException nfe) {
-            return  null;
+        } catch(NumberFormatException | NullPointerException e) {
+            return null;
         }
     }
 
@@ -56,14 +53,17 @@ public class RequestUtils {
       return null;
     }
 
-    public static Map<String, String> getParameterMap(HttpServletRequest request) {
-        Map<String, String> resultMap = new HashMap<>();
-        request.getParameterMap().forEach((key, value) -> resultMap.put(key, value[0]));
-        return resultMap;
-    }
-
-    public static String parameterMapToQuery(Map<String, String> map) {
-        return map.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue()).reduce((p1, p2) -> p1 + "&" + p2).orElse("");
+    // converts map of parameters to a query string
+    public static String parameterMapToQuery(Map<String, String[]> map) {
+        return map.entrySet().stream().map(entry -> {
+            StringBuilder sb = new StringBuilder();
+            String[] arr = entry.getValue();
+            if(arr.length > 0)
+                sb.append(entry.getKey()).append("=").append(arr[0]);
+            for(int i = 1; i < arr.length; i++)
+                sb.append("&").append(entry.getKey()).append("=").append(arr[i]);
+            return sb.toString();
+        }).reduce((s1, s2) -> s1 + "&" + s2).orElse("");
     }
 
 }

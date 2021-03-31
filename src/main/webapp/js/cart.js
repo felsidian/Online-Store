@@ -113,7 +113,7 @@ function createCartItemElement(id, name, price, quantity, imageUrl) {
         '<input type="number" min="1" max="999" value="' + quantity + '" data-id="' + id + '" class="form-control quantity-input">',
         '</div>',
         '<div class="col-lg-3 col-5">',
-        '<span>' + price + ' ₴' + '</span>',
+        '<span>' + price + '' + '</span>',
         '</div>',
         '<div class="col-lg-1 col-2">',
         '<button type="button" class="btn-close float-end delete-from-cart" aria-label="Close" value="' + id + '"></button>',

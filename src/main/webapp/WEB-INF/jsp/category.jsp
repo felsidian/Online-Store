@@ -101,43 +101,38 @@
         <div class="col-lg-3 col-md-5">
             <form action="${Path.CATEGORY_PATH}" method="get" id="filter-form">
                 <input type="hidden" name="id"
-                       value="<c:out value="${param.id}"/>" ${param.id == null ? 'disabled' : ''}>
+                       value="${requestScope.categoryId}" ${requestScope.categoryId == null ? 'disabled' : ''}>
                 <input type="hidden" name="sort"
-                       value="<c:out value="${param.sort}"/>" ${param.sort == null ? 'disabled' : ''}>
-                <input type="hidden" name="page"
-                       value="<c:out value="${param.page}"/>" ${param.page == null ? 'disabled' : ''}>
+                       value="${requestScope.sort}" ${requestScope.sort == null ? 'disabled' : ''}>
                 <div class="list-group">
                     <div class="list-group-item">
-                        <div class="form-floating mb-3">
-                            <input type="" class="form-control" id="floatingInput">
-                            <label for="floatingInput"><fmt:message key="priceFrom"/></label>
-                        </div>
-                        <div class="form-floating">
-                            <input type="" class="form-control" id="floatingPassword">
-                            <label for="floatingPassword"><fmt:message key="priceTo"/></label>
+                        <div class="row my-2">
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <input type="number" min="0" class="form-control" id="priceFrom" name="priceFrom" value="${requestScope.priceFrom}">
+                                    <label for="priceFrom"><fmt:message key="priceFrom"/></label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <input type="number" min="0" class="form-control" id="priceTo" name="priceTo" value="${requestScope.priceTo}">
+                                    <label for="priceTo"><fmt:message key="priceTo"/></label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="list-group-item">
                         <fieldset>
                             <legend><fmt:message key="brand"/></legend>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="brand" value="Makita" id="check1" ${fn:contains(paramValues.brand, 'Makita') ? 'checked' : ''}>
-                                <label class="form-check-label" for="check1">
-                                    Makita
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="brand" value="Intertool" id="check2" ${fn:contains(paramValues.brand, 'Intertool') ? 'checked' : ''}>
-                                <label class="form-check-label" for="check2">
-                                    Intertool
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="brand" value="Xiaomi" id="check3" ${fn:contains(paramValues.brand, 'Xiaomi') ? 'checked' : ''}>
-                                <label class="form-check-label" for="check3">
-                                    Xiaomi
-                                </label>
-                            </div>
+
+                            <c:forEach items="${requestScope.allBrands}" var="brand">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="brand" value="${brand}" ${fn:contains(paramValues.brand, brand) ? 'checked' : ''}>
+                                    <label class="form-check-label" >
+                                            ${brand}
+                                    </label>
+                                </div>
+                            </c:forEach>
                         </fieldset>
                     </div>
                     <button type="submit" class="btn btn-secondary my-3"><fmt:message key="filter"/></button>

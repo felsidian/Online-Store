@@ -13,4 +13,8 @@ public class CustomTagLibrary {
         return false;
     }
 
+    public static boolean contains(java.util.List<String> list, String s) {
+        return list != null && s != null && list.contains(s);
+    }
+
 }

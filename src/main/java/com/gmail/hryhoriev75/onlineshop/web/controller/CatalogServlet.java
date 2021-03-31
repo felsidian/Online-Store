@@ -25,7 +25,7 @@ public class CatalogServlet extends HttpServlet {
         request.setAttribute("categories", categories);
 
         // get 6 products
-        List<Product> products = ProductDAO.getProducts(6);
+        List<Product> products = ProductDAO.getPopularProducts(6);
         request.setAttribute("products", products);
 
         RequestDispatcher disp = request.getRequestDispatcher(CATALOG_VIEW_PATH);

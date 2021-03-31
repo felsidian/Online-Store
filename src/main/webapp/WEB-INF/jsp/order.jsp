@@ -25,6 +25,8 @@
             <h6 class="my-4"><fmt:message key="createDate"/>: <fmt:formatDate type="both" value="${requestScope.order.createTime}"/></h6>
             <c:choose>
                 <c:when test="${sessionScope.user.role.admin}">
+                   <h6 class="my-4"><c:out value="${requestScope.orderOwner.name}"/></h6>
+                    <h6 class="my-4"><c:out value="${requestScope.orderOwner.email}"/></h6>
                     <div class="row">
                         <form action="${Path.UPDATE_PATH}" method="post">
                             <input type="hidden" name="what" value="status">
