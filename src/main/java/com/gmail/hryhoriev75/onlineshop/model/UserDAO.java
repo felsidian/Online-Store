@@ -1,17 +1,26 @@
 package com.gmail.hryhoriev75.onlineshop.model;
 
 import com.gmail.hryhoriev75.onlineshop.db.DBHelper;
+import com.gmail.hryhoriev75.onlineshop.model.entity.Order;
 import com.gmail.hryhoriev75.onlineshop.model.entity.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Data access object for User entity
  */
 public class UserDAO {
+
+    public static final String SQL_GET_USER_BY_ID = "SELECT user.*,role.name AS role_name FROM user LEFT JOIN role ON role_id=role.id WHERE user.id=?";
+    public static final String SQL_GET_USER_BY_EMAIL = "SELECT user.*,role.name AS role_name FROM user LEFT JOIN role ON role_id=role.id WHERE user.email=?";
+    public static final String SQL_GET_ALL_USERS = "SELECT user.*,role.name AS role_name FROM user LEFT JOIN role ON role_id=role.id";
+    public static final String SQL_ADD_USER = "INSERT INTO user(email,password,name,phone_number,locale,role_id,blocked)VALUES(?,?,?,?,?,(SELECT id FROM role WHERE name=? LIMIT 1),?)";
+    public static final String SQL_BLOCK_USER = "UPDATE user SET blocked=? WHERE id=?";
 
     private static final String FIELD_ID = "id";
     private static final String FIELD_NAME = "name";
@@ -28,8 +37,7 @@ public class UserDAO {
     public static User findUserById(long id) {
         User user = null;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT user.*,role.name AS role_name FROM user " +
-                     "LEFT JOIN role ON role_id=role.id WHERE user.id=?")) {
+             PreparedStatement pst = con.prepareStatement(SQL_GET_USER_BY_ID)) {
             pst.setLong(1, id);
             try (ResultSet rs = pst.executeQuery()) {
                 if(rs.next())
@@ -48,8 +56,7 @@ public class UserDAO {
     public static User findUserByEmail(String email) {
         User user = null;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT user.*,role.name AS role_name FROM user " +
-                     "LEFT JOIN role ON role_id=role.id WHERE user.email=?")) {
+             PreparedStatement pst = con.prepareStatement(SQL_GET_USER_BY_EMAIL)) {
             pst.setString(1, email);
             try (ResultSet rs = pst.executeQuery()) {
                 if(rs.next())
@@ -62,14 +69,47 @@ public class UserDAO {
     }
 
     /**
+     * Returns list of all users
+     *
+     * @return List of User entities. If any present returns empty list.
+     */
+    public static List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        try (Connection con = DBHelper.getInstance().getConnection();
+             PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_USERS)) {
+            try(ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    users.add(mapResultSet(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return users;
+    }
+
+    /**
+     * Updates block status of user with given id
+     */
+    public static void blockUser(long userId, boolean blocked) {
+        try (Connection con = DBHelper.getInstance().getConnection();
+             PreparedStatement pst = con.prepareStatement(SQL_BLOCK_USER)) {
+            pst.setBoolean(1, blocked);
+            pst.setLong(2, userId);
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
      * Adding user to DB with given parameters
      * @return true if User was successfully added, false otherwise
      */
     public static boolean addUser(String email, String password, String name, String phoneNumber, String locale) {
         boolean result = false;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("INSERT INTO user(email,password,name,phone_number,locale," +
-                     "role_id,blocked)VALUES(?,?,?,?,?,(SELECT id FROM role WHERE name=? LIMIT 1),?)")) {
+             PreparedStatement pst = con.prepareStatement(SQL_ADD_USER)) {
             pst.setString(1, email);
             pst.setString(2, password);
             pst.setString(3, name);

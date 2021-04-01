@@ -1,6 +1,7 @@
 package com.gmail.hryhoriev75.onlineshop.web.controller.admin;
 
 import com.gmail.hryhoriev75.onlineshop.model.OrderDAO;
+import com.gmail.hryhoriev75.onlineshop.model.UserDAO;
 import com.gmail.hryhoriev75.onlineshop.model.entity.Order;
 import com.gmail.hryhoriev75.onlineshop.model.entity.User;
 import com.gmail.hryhoriev75.onlineshop.web.Path;
@@ -18,20 +19,16 @@ import java.util.List;
  * Controller for all users page
  * Available only for admin
  */
-//@WebServlet(name = "UsersServlet", value = Path.USERS_PATH)
+@WebServlet(name = "UsersServlet", value = Path.USERS_PATH)
 public class UsersServlet extends HttpServlet {
 
-    private static final String ORDERS_VIEW_PATH = "/WEB-INF/jsp/all_users.jsp";
+    public static final String USERS_VIEW_PATH = "/WEB-INF/jsp/users.jsp";
+    public static final String USERS_ATTRIBUTE = "users";
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        User user = RequestUtils.getSessionAttribute(request, "user", User.class);
-        if (user != null) {
-            List<Order> orders = OrderDAO.getOrdersByUserId(user.getId());
-            request.setAttribute("orders", orders);
-            request.getRequestDispatcher(ORDERS_VIEW_PATH).forward(request, response);
-            return;
-        }
-        request.getRequestDispatcher(Path.NOT_FOUND_PATH).forward(request, response);
+        List<User> users = UserDAO.getAllUsers();
+        request.setAttribute(USERS_ATTRIBUTE, users);
+        request.getRequestDispatcher(USERS_VIEW_PATH).forward(request, response);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
