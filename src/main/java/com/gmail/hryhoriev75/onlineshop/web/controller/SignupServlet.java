@@ -5,6 +5,7 @@ import com.gmail.hryhoriev75.onlineshop.model.UserDAO;
 import com.gmail.hryhoriev75.onlineshop.model.entity.User;
 import com.gmail.hryhoriev75.onlineshop.security.Security;
 import com.gmail.hryhoriev75.onlineshop.web.Path;
+import com.gmail.hryhoriev75.onlineshop.web.filter.LangFilter;
 import com.gmail.hryhoriev75.onlineshop.web.utils.RequestUtils;
 
 import javax.servlet.RequestDispatcher;
@@ -26,22 +27,28 @@ import java.util.Map;
 @WebServlet(name = "SignupServlet", value = Path.SIGNUP_PATH)
 public class SignupServlet extends HttpServlet {
 
-    private static final String SIGNUP_VIEW_PATH = "/WEB-INF/jsp/signup.jsp";
+    public static final String SIGNUP_VIEW_PATH = "/WEB-INF/jsp/signup.jsp";
+
+    public static final String USER_ATTRIBUTE = "user";
+    public static final String ERROR_ATTRIBUTE = "error";
+    public static final String NAME_ATTRIBUTE = "name";
+    public static final String PHONE_NUMBER_ATTRIBUTE = "phoneNumber";
+    public static final String EMAIL_PARAMETER = "email";
+    public static final String PASSWORD_PARAMETER = "password";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if (RequestUtils.getSessionAttribute(request, "user", User.class) != null) {
+        if (RequestUtils.getSessionAttribute(request, USER_ATTRIBUTE, User.class) != null) {
             // if we somehow opened /signup page while being already logged in, we just do redirect to catalog (/)
             response.sendRedirect(Path.CATALOG_PATH);
         } else {
-            RequestDispatcher disp = request.getRequestDispatcher(SIGNUP_VIEW_PATH);
-            disp.forward(request, response);
+            request.getRequestDispatcher(SIGNUP_VIEW_PATH).forward(request, response);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (RequestUtils.getSessionAttribute(request, "user", User.class) != null) {
+        if (RequestUtils.getSessionAttribute(request, USER_ATTRIBUTE, User.class) != null) {
             // if we somehow opened /signup page while being already logged in, we just do redirect to catalog (/)
             response.sendRedirect(Path.CATALOG_PATH);
             return;
@@ -49,41 +56,41 @@ public class SignupServlet extends HttpServlet {
 
         // continue to perform signup
         // retrieving parameters from signup form
-        String email = request.getParameter("email").toLowerCase().trim();
-        String password = request.getParameter("password");
-        String name = request.getParameter("name");
-        String phoneNumber = request.getParameter("phoneNumber");
+        String email = request.getParameter(EMAIL_PARAMETER).toLowerCase().trim();
+        String password = request.getParameter(PASSWORD_PARAMETER);
+        String name = request.getParameter(NAME_ATTRIBUTE);
+        String phoneNumber = request.getParameter(PHONE_NUMBER_ATTRIBUTE);
 
         // filling map with parameters which will be passed to the view
         Map<String, String> viewAttributes = new HashMap<>();
-        viewAttributes.put("email", email);
-        viewAttributes.put("name", name);
-        viewAttributes.put("phoneNumber", phoneNumber);
+        viewAttributes.put(EMAIL_PARAMETER, email);
+        viewAttributes.put(NAME_ATTRIBUTE, name);
+        viewAttributes.put(PHONE_NUMBER_ATTRIBUTE, phoneNumber);
 
-        if(!Security.isEmailValid(email)) {
-            viewAttributes.put("error", Constants.EMAIL_NOT_VALID);
+        if(!Security.isPasswordValid(password)) {
+            viewAttributes.put(ERROR_ATTRIBUTE, Constants.PASSWORD_NOT_VALID);
             passErrorToView(request, response, viewAttributes);
             return;
         }
-        if(!Security.isPasswordValid(password)) {
-            viewAttributes.put("error", Constants.PASSWORD_NOT_VALID);
+        if(!Security.isEmailValid(email)) {
+            viewAttributes.put(ERROR_ATTRIBUTE, Constants.EMAIL_NOT_VALID);
             passErrorToView(request, response, viewAttributes);
             return;
         }
         if(name == null || name.isBlank()) {
-            viewAttributes.put("error", Constants.NAME_NOT_VALID);
+            viewAttributes.put(ERROR_ATTRIBUTE, Constants.NAME_NOT_VALID);
             passErrorToView(request, response, viewAttributes);
             return;
         }
         if(phoneNumber != null && !Security.isPhoneValid(phoneNumber)) {
-            viewAttributes.put("error", Constants.PHONE_NOT_VALID);
+            viewAttributes.put(ERROR_ATTRIBUTE, Constants.PHONE_NOT_VALID);
             passErrorToView(request, response, viewAttributes);
             return;
         }
         // all request parameters are valid
 
         if(UserDAO.findUserByEmail(email) != null) {
-            viewAttributes.put("error", Constants.EMAIL_EXISTS);
+            viewAttributes.put(ERROR_ATTRIBUTE, Constants.EMAIL_EXISTS);
             passErrorToView(request, response, viewAttributes);
             return;
         }
@@ -91,18 +98,18 @@ public class SignupServlet extends HttpServlet {
         // lets create user in DB and make him logged in
         boolean userAdded = false;
         try {
-            userAdded = UserDAO.addUser(email, Security.hashPassword(password), name, phoneNumber, "uk");
+            userAdded = UserDAO.addUser(email, Security.hashPassword(password), name, phoneNumber, LangFilter.UK_LANG);
         } catch (Exception e) {
             e.printStackTrace();
         }
         if(!userAdded) {
-            viewAttributes.put("error", Constants.OTHER_ERROR);
+            viewAttributes.put(ERROR_ATTRIBUTE, Constants.OTHER_ERROR);
             passErrorToView(request, response, viewAttributes);
         } else {
             User user = UserDAO.findUserByEmail(email);
             // lets put him into session and redirect to catalog (/)
             HttpSession session = request.getSession(true);
-            session.setAttribute("user", user);
+            session.setAttribute(USER_ATTRIBUTE, user);
             session.setMaxInactiveInterval(86400); // 1 day
             response.sendRedirect(Path.CATALOG_PATH);
         }

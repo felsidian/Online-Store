@@ -16,7 +16,7 @@ public class Product extends Entity {
     private Date createTime;
     private BigDecimal price;
     private String imageUrl;
-    private Category category; // "user" or "admin"
+    private Category category;
     private int power;
     private BigDecimal weight;
     private String country;

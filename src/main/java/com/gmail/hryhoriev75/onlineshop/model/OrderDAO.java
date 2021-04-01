@@ -15,15 +15,25 @@ import java.util.List;
  */
 public class OrderDAO {
 
-    private static final String TABLE_STATUS = "status";
-    private static final String TABLE_ORDER_CONTENT = "order_content";
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_USER_ID = "user_id";
-    private static final String FIELD_NAME = "name";
-    private static final String FIELD_CREATE_TIME = "create_time";
-    private static final String FIELD_PRICE = "price";
-    private static final String FIELD_IMAGE_URL = "image_url";
-    private static final String FIELD_QUANTITY = "quantity";
+    public static final String SQL_ORDER_BY_ID = "SELECT * FROM `order` LEFT JOIN status ON status_id=status.id WHERE order.id=?";
+    public static final String SQL_CREATE_ORDER = "INSERT INTO `order`(user_id,create_time,status_id)" +
+            "VALUES(?,?,(SELECT id FROM status WHERE name=? LIMIT 1))";
+    public static final String SQL_ADD_ORDER_CONTENT = "INSERT INTO order_content(order_id,product_id,quantity,price)" +
+            "VALUES(?,?,?,(SELECT price FROM product WHERE id=? LIMIT 1))";
+    public static final String SQL_GET_ORDER_CONTENT = "SELECT * FROM order_content INNER JOIN product ON product_id=product.id WHERE order_id=?";
+    public static final String SQL_ORDERS_BY_USER_ID = "SELECT `order`.*, status.name FROM `order` LEFT JOIN status ON status_id=status.id WHERE user_id=?";
+    public static final String SQL_GET_ALL_ORDERS = "SELECT `order`.*, status.name FROM `order` LEFT JOIN status ON status_id=status.id";
+    public static final String SQL_UPDATE_STATUS = "UPDATE `order` SET status_id=? WHERE id=?";
+
+    public static final String TABLE_STATUS = "status";
+    public static final String TABLE_ORDER_CONTENT = "order_content";
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_USER_ID = "user_id";
+    public static final String FIELD_NAME = "name";
+    public static final String FIELD_CREATE_TIME = "create_time";
+    public static final String FIELD_PRICE = "price";
+    public static final String FIELD_IMAGE_URL = "image_url";
+    public static final String FIELD_QUANTITY = "quantity";
 
     /**
      * @param id Order identifier
@@ -32,8 +42,7 @@ public class OrderDAO {
     public static Order findOrderById(long id) {
         Order order = null;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT * FROM `order` LEFT JOIN status ON status_id=status.id " +
-                     "WHERE order.id=?")) {
+             PreparedStatement pst = con.prepareStatement(SQL_ORDER_BY_ID)) {
             pst.setLong(1, id);
             try (ResultSet rs = pst.executeQuery()) {
                 if(rs.next())
@@ -69,8 +78,7 @@ public class OrderDAO {
     private static long addOrder(long userId, Instant createTime, Order.Status status) {
         long orderId = 0;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("INSERT INTO `order`(user_id,create_time,status_id)" +
-                     "VALUES(?,?,(SELECT id FROM status WHERE name=? LIMIT 1))", Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement pst = con.prepareStatement(SQL_CREATE_ORDER, Statement.RETURN_GENERATED_KEYS)) {
             pst.setLong(1, userId);
             pst.setTimestamp(2, Timestamp.from(createTime));
             pst.setString(3, status.toString());
@@ -94,8 +102,7 @@ public class OrderDAO {
      */
     private static void addOrderContent(long orderId, List<Order.Record> orderContent) {
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("INSERT INTO order_content(order_id,product_id,quantity,price)" +
-                     "VALUES(?,?,?,(SELECT price FROM product WHERE id=? LIMIT 1))")) {
+             PreparedStatement pst = con.prepareStatement(SQL_ADD_ORDER_CONTENT)) {
             for(Order.Record record : orderContent) {
                 pst.setLong(1, orderId);
                 pst.setLong(2, record.getProduct().getId());
@@ -117,7 +124,7 @@ public class OrderDAO {
     public static List<Order.Record> getOrderContent(long orderId) {
         List<Order.Record> orderContent = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT * FROM order_content INNER JOIN product ON product_id=product.id WHERE order_id=?")) {
+             PreparedStatement pst = con.prepareStatement(SQL_GET_ORDER_CONTENT)) {
             pst.setLong(1, orderId);
             try(ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
@@ -138,8 +145,7 @@ public class OrderDAO {
     public static List<Order> getOrdersByUserId(long orderId) {
         List<Order> orders = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT `order`.*, status.name" +
-                     " FROM `order` LEFT JOIN status ON status_id=status.id WHERE user_id=?")) {
+             PreparedStatement pst = con.prepareStatement(SQL_ORDERS_BY_USER_ID)) {
             pst.setLong(1, orderId);
             try(ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
@@ -160,8 +166,7 @@ public class OrderDAO {
     public static List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT `order`.*, status.name" +
-                     " FROM `order` LEFT JOIN status ON status_id=status.id")) {
+             PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_ORDERS)) {
             try(ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     orders.add(mapOrder(rs));
@@ -178,7 +183,7 @@ public class OrderDAO {
      */
     public static void updateStatus(long orderId, int statusId) {
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("UPDATE `order` SET status_id=? WHERE id=?")) {
+             PreparedStatement pst = con.prepareStatement(SQL_UPDATE_STATUS)) {
             pst.setInt(1, statusId);
             pst.setLong(2, orderId);
             pst.executeUpdate();

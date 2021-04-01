@@ -1,5 +1,6 @@
 package com.gmail.hryhoriev75.onlineshop.web.controller.admin;
 
+import com.gmail.hryhoriev75.onlineshop.Constants;
 import com.gmail.hryhoriev75.onlineshop.model.ProductDAO;
 import com.gmail.hryhoriev75.onlineshop.model.entity.Category;
 import com.gmail.hryhoriev75.onlineshop.model.entity.Product;
@@ -32,7 +33,22 @@ import java.util.Map;
 @WebServlet(name = "AddProductServlet", value = Path.ADD_PRODUCT_PATH)
 public class AddProductServlet extends HttpServlet {
 
-    private static final String ADD_PRODUCT_VIEW_PATH = "/WEB-INF/jsp/add_product.jsp";
+    public static final String ADD_PRODUCT_VIEW_PATH = "/WEB-INF/jsp/add_product.jsp";
+
+    public static final String PRODUCT_ATTRIBUTE = "product";
+    public static final String CATEGORIES_ATTRIBUTE = "categories";
+    public static final String ERROR_ATTRIBUTE = "error";
+
+    public static final String NAME_PARAMETER = "name";
+    public static final String CATEGORY_ID_PARAMETER = "categoryId";
+    public static final String PRICE_PARAMETER = "price";
+    public static final String BRAND_PARAMETER = "brand";
+    public static final String DESCRIPTION_PARAMETER = "description";
+    public static final String IMAGE_URL_PARAMETER = "imageUrl";
+    public static final String POWER_PARAMETER = "power";
+    public static final String WEIGHT_PARAMETER = "weight";
+    public static final String COUNTRY_PARAMETER = "country";
+    public static final String ID_PARAMETER = "id";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -40,55 +56,31 @@ public class AddProductServlet extends HttpServlet {
         if (productId > 0) {
             Product product = ProductDAO.findProductById(productId);
             if (product != null) {
-                request.setAttribute("product", product);
+                request.setAttribute(PRODUCT_ATTRIBUTE, product);
             }
         }
         List<Category> categories = ProductDAO.getAllCategories();
-        request.setAttribute("categories", categories);
+        request.setAttribute(CATEGORIES_ATTRIBUTE, categories);
         request.getRequestDispatcher(ADD_PRODUCT_VIEW_PATH).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        long id = RequestUtils.getLongParameter(request, "id");
-        String name = request.getParameter("name");
-        long categoryId = RequestUtils.getLongParameter(request, "categoryId");
-        BigDecimal price = RequestUtils.getBigDecimalParameter(request, "price");
-        String brand = request.getParameter("brand");
-        String description = request.getParameter("description");
-        String imageUrl = request.getParameter("imageUrl");
-        int power = RequestUtils.getIntParameter(request, "power");
-        BigDecimal weight = RequestUtils.getBigDecimalParameter(request, "weight");
-        String country = request.getParameter("country");
+        Product product = retrieveProductFromRequest(request);
 
-        Category category = ProductDAO.findCategoryById(categoryId);
+        // passing product back to view in case of error
+        request.setAttribute(PRODUCT_ATTRIBUTE, product);
 
-        Product product = new Product();
-        product.setId(id);
-        product.setName(name);
-        product.setCategory(category);
-        product.setPrice(price);
-        product.setBrand(brand);
-        product.setDescription(description);
-        product.setCreateTime(new Date());
-        product.setImageUrl(imageUrl != null && !imageUrl.equals("") ? imageUrl: Path.BLANK_IMAGE);
-        product.setPower(power);
-        product.setWeight(weight);
-        product.setCountry(country);
-
-        // passing product to view in case of error
-        request.setAttribute("product", product);
-
-        if (name == null || name.isBlank()) {
-            passErrorToView(request, response, "Name cant be empty");
+        if (product.getName() == null || product.getName().isBlank()) {
+            passErrorToView(request, response, Constants.NAME_EMPTY_ERROR);
             return;
         }
-        if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
-            passErrorToView(request, response, "Price cant be less then 0");
+        if (product.getPrice() == null || product.getPrice().compareTo(BigDecimal.ZERO) < 0) {
+            passErrorToView(request, response, Constants.PRICE_NOT_VALID);
             return;
         }
-        if (category == null) {
-            passErrorToView(request, response, "Wrong category");
+        if (product.getCategory() == null) {
+            passErrorToView(request, response, Constants.WRONG_CATEGORY);
             return;
         }
 
@@ -96,8 +88,29 @@ public class AddProductServlet extends HttpServlet {
         response.sendRedirect(Path.PRODUCT_PATH + "?id=" + productId);
     }
 
+    private Product retrieveProductFromRequest(HttpServletRequest request) {
+        Product product = new Product();
+        product.setId(RequestUtils.getLongParameter(request, ID_PARAMETER));
+        product.setName(request.getParameter(NAME_PARAMETER));
+
+        Category category = ProductDAO.findCategoryById(RequestUtils.getLongParameter(request, CATEGORY_ID_PARAMETER));
+        product.setCategory(category);
+
+        product.setPrice(RequestUtils.getBigDecimalParameter(request, PRICE_PARAMETER));
+        product.setBrand(request.getParameter(BRAND_PARAMETER));
+        product.setDescription(request.getParameter(DESCRIPTION_PARAMETER));
+        product.setCreateTime(new Date());
+
+        String imageUrl = request.getParameter(IMAGE_URL_PARAMETER);
+        product.setImageUrl(imageUrl != null && !imageUrl.equals("") ? imageUrl: Path.BLANK_IMAGE);
+        product.setPower(RequestUtils.getIntParameter(request, POWER_PARAMETER));
+        product.setWeight(RequestUtils.getBigDecimalParameter(request, WEIGHT_PARAMETER));
+        product.setCountry(request.getParameter(COUNTRY_PARAMETER));
+        return product;
+    }
+
     private void passErrorToView(HttpServletRequest request, HttpServletResponse response, String error) throws ServletException, IOException {
-        request.setAttribute("error", error);
+        request.setAttribute(ERROR_ATTRIBUTE, error);
         request.getRequestDispatcher(ADD_PRODUCT_VIEW_PATH).forward(request, response);
     }
 

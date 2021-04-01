@@ -16,15 +16,10 @@ import java.util.regex.Pattern;
  */
 public class Security {
 
-    private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
-            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
-            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$");
-
     // Hashing parameters
     private static final int ITERATIONS = 200000;
     private static final int KEY_LENGTH = 512; // in bits
     private static final int SALT_LENGTH = 128; // in bits
-
 
     /**
      * Hashing password using Password-Based Key Derivation Function (PBKDF)

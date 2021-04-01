@@ -20,10 +20,12 @@ import java.io.IOException;
 @WebServlet(name = "ProductServlet", value = Path.PRODUCT_PATH)
 public class ProductServlet extends HttpServlet {
 
-    private static final String PRODUCT_VIEW_PATH = "/WEB-INF/jsp/product.jsp";
+    public static final String PRODUCT_VIEW_PATH = "/WEB-INF/jsp/product.jsp";
+    public static final String ID_PARAMETER = "id";
+    public static final String PRODUCT_ATTRIBUTE = "product";
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        long productId = RequestUtils.getLongParameter(request, "id");
+        long productId = RequestUtils.getLongParameter(request, ID_PARAMETER);
         if (productId <= 0) {
             request.getRequestDispatcher(Path.NOT_FOUND_PATH).forward(request, response);
             return;
@@ -33,7 +35,7 @@ public class ProductServlet extends HttpServlet {
             request.getRequestDispatcher(Path.NOT_FOUND_PATH).forward(request, response);
             return;
         }
-        request.setAttribute("product", product);
+        request.setAttribute(PRODUCT_ATTRIBUTE, product);
         request.getRequestDispatcher(PRODUCT_VIEW_PATH).forward(request, response);
     }
 

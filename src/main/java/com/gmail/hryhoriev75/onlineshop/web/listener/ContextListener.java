@@ -1,7 +1,6 @@
 package com.gmail.hryhoriev75.onlineshop.web.listener;
 
 import com.gmail.hryhoriev75.onlineshop.db.DBHelper;
-
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;

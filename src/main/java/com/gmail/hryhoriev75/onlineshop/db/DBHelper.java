@@ -12,16 +12,22 @@ import java.sql.SQLException;
  */
 public class DBHelper {
 
+    public static final String HOST = "RDS_HOSTNAME";
+    public static final String PORT = "RDS_PORT";
+    public static final String DB_NAME = "RDS_DB_NAME";
+    public static final String USERNAME = "RDS_USERNAME";
+    public static final String PASSWORD = "RDS_PASSWORD";
+
     private static volatile DBHelper instance;
 
     private final HikariDataSource ds;
 
     private DBHelper() {
-        String hostname = System.getProperty("RDS_HOSTNAME");
-        String port = System.getProperty("RDS_PORT");
-        String dbName = System.getProperty("RDS_DB_NAME");
-        String userName = System.getProperty("RDS_USERNAME");
-        String password = System.getProperty("RDS_PASSWORD");
+        String hostname = System.getProperty(HOST);
+        String port = System.getProperty(PORT);
+        String dbName = System.getProperty(DB_NAME);
+        String userName = System.getProperty(USERNAME);
+        String password = System.getProperty(PASSWORD);
 
         //configuring db connection and pooling with recommended params
         HikariConfig config = new HikariConfig();

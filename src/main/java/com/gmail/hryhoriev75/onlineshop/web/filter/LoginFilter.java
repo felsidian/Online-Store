@@ -17,8 +17,9 @@ import java.util.List;
 @WebFilter("/*")
 public class LoginFilter implements Filter {
 
-    private static final List<String> ADMIN_PATHS = Arrays.asList(Path.ADD_PRODUCT_PATH, Path.USERS_PATH,
+    public static final List<String> ADMIN_PATHS = Arrays.asList(Path.ADD_PRODUCT_PATH, Path.USERS_PATH,
             Path.ALL_ORDERS_PATH, Path.UPDATE_PATH);
+    public static final String USER_ATTRIBUTE = "user";
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
@@ -27,7 +28,7 @@ public class LoginFilter implements Filter {
 
             // if we trying to open admin page but we are not admin ourself then go to 404
             if(ADMIN_PATHS.contains(req.getServletPath())) {
-                User user = RequestUtils.getSessionAttribute(req, "user", User.class);
+                User user = RequestUtils.getSessionAttribute(req, USER_ATTRIBUTE, User.class);
                 if(user == null || user.getRole() != User.Role.ADMIN) {
                     request.getRequestDispatcher(Path.NOT_FOUND_PATH).forward(request, response);
                     return;

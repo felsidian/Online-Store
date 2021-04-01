@@ -21,16 +21,20 @@ import java.util.List;
 @WebServlet(name = "CatalogServlet", value = "")
 public class CatalogServlet extends HttpServlet {
 
-    private static final String CATALOG_VIEW_PATH = "/WEB-INF/jsp/index.jsp";
+    public static final String CATALOG_VIEW_PATH = "/WEB-INF/jsp/index.jsp";
+
+    public static final String CATEGORIES_ATTRIBUTE = "categories";
+    public static final String PRODUCTS_ATTRIBUTE = "products";
+    public static final int MAX_PRODUCT_COUNT = 6;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<Category> categories = ProductDAO.getAllCategories();
-        request.setAttribute("categories", categories);
+        request.setAttribute(CATEGORIES_ATTRIBUTE, categories);
 
         // get 6 most popular products
-        List<Product> products = ProductDAO.getPopularProducts(6);
-        request.setAttribute("products", products);
+        List<Product> products = ProductDAO.getPopularProducts(MAX_PRODUCT_COUNT);
+        request.setAttribute(PRODUCTS_ATTRIBUTE, products);
 
         request.getRequestDispatcher(CATALOG_VIEW_PATH).forward(request, response);
     }

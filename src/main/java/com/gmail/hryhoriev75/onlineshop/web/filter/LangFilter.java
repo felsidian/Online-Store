@@ -16,20 +16,21 @@ public class LangFilter implements Filter {
     public static final String EN_LANG = "en";
     public static final String UK_LANG = "uk";
     public static final String LANG_COOKIE_NAME = "lang";
+    public static final String ENCODING = "UTF-8";
 
     /**
      * Retrieving lang cookie and sets appropriate language for every request
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding(ENCODING);
+        response.setCharacterEncoding(ENCODING);
         HttpServletRequest req = (HttpServletRequest) request;
         String lang = getCookieValue(req);
         if(lang != null && (lang.equals(EN_LANG) || lang.equals(UK_LANG)))
-            request.setAttribute("lang", lang);
+            request.setAttribute(LANG_COOKIE_NAME, lang);
         else
-            request.setAttribute("lang", UK_LANG);
+            request.setAttribute(LANG_COOKIE_NAME, UK_LANG);
         chain.doFilter(request, response);
     }
 

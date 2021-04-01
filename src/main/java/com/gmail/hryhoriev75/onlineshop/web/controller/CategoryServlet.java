@@ -27,13 +27,27 @@ import java.util.Map;
 @WebServlet(name = "CategoryServlet", value = Path.CATEGORY_PATH)
 public class CategoryServlet extends HttpServlet {
 
-    private static final String CATEGORY_VIEW_PATH = "/WEB-INF/jsp/category.jsp";
+    public static final String CATEGORY_VIEW_PATH = "/WEB-INF/jsp/category.jsp";
 
-    private static final int PAGE_SIZE = 6;
+    public static final int PAGE_SIZE = 6;
+    public static final String ID_PARAMETER = "id";
+    public static final String BRAND_PARAMETER = "brand";
+    public static final String PRICE_FROM_PARAMETER = "priceFrom";
+    public static final String PRICE_TO_PARAMETER = "priceTo";
+    public static final String SORT_PARAMETER = "sort";
+    public static final String PAGE_PARAMETER = "page";
+    public static final String PAGE_NUMBER_ATTRIBUTE = "pageNumber";
+    public static final String NEXT_PAGE_EXISTS_ATTRIBUTE = "nextPageExists";
+    public static final String QUERY_WITH_NO_PAGE_ATTRIBUTE = "queryWithNoPage";
+    public static final String QUERY_WITH_NO_SORT_ATTRIBUTE = "queryWithNoSort";
+    public static final String CATEGORY_ID_ATTRIBUTE = "categoryId";
+    public static final String ALL_BRANDS_ATTRIBUTE = "allBrands";
+    public static final String PRODUCTS_ATTRIBUTE = "products";
+    public static final String CATEGORY_ATTRIBUTE = "category";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        long categoryId = RequestUtils.getLongParameter(request, "id");
+        long categoryId = RequestUtils.getLongParameter(request, ID_PARAMETER);
         if (categoryId <= 0) {
             response.sendRedirect(Path.CATALOG_PATH);
             return;
@@ -45,10 +59,10 @@ public class CategoryServlet extends HttpServlet {
         }
 
         List<String> allBrands = ProductDAO.getBrandsByCategory(categoryId);
-        List<String> validBrandParams = validateBrands(request.getParameterValues("brand"), allBrands);
+        List<String> validBrandParams = validateBrands(request.getParameterValues(BRAND_PARAMETER), allBrands);
 
-        BigDecimal priceFrom = RequestUtils.getBigDecimalParameter(request, "priceFrom");
-        BigDecimal priceTo = RequestUtils.getBigDecimalParameter(request, "priceTo");
+        BigDecimal priceFrom = RequestUtils.getBigDecimalParameter(request, PRICE_FROM_PARAMETER);
+        BigDecimal priceTo = RequestUtils.getBigDecimalParameter(request, PRICE_TO_PARAMETER);
         if (priceFrom != null && priceFrom.compareTo(BigDecimal.ZERO) < 0 ) {
             priceFrom = null;
         }
@@ -56,13 +70,13 @@ public class CategoryServlet extends HttpServlet {
             priceTo = null;
         }
 
-        String sort = RequestUtils.getStringParameter(request, "sort");
+        String sort = RequestUtils.getStringParameter(request, SORT_PARAMETER);
         if (sort == null) {
             sort = Constants.SORT_NEW_FIRST;
         }
 
         // Pagination
-        int pageNumber = RequestUtils.getIntParameter(request, "page");
+        int pageNumber = RequestUtils.getIntParameter(request, PAGE_PARAMETER);
         if (pageNumber <= 1) {
             pageNumber = 1;
         }
@@ -76,27 +90,27 @@ public class CategoryServlet extends HttpServlet {
 
         Map<String, String[]> parameterMap = new HashMap<>(request.getParameterMap());
         // removing page parameter so jsp can add it itself
-        parameterMap.remove("page");
-        request.setAttribute("pageNumber", pageNumber);
-        request.setAttribute("nextPageExists", nextPageExists);
-        request.setAttribute("queryWithNoPage", RequestUtils.parameterMapToQuery(parameterMap));
+        parameterMap.remove(PAGE_PARAMETER);
+        request.setAttribute(PAGE_NUMBER_ATTRIBUTE, pageNumber);
+        request.setAttribute(NEXT_PAGE_EXISTS_ATTRIBUTE, nextPageExists);
+        request.setAttribute(QUERY_WITH_NO_PAGE_ATTRIBUTE, RequestUtils.parameterMapToQuery(parameterMap));
         // Pagination ended
 
         // removing sort parameter so jsp can add it itself
-        parameterMap.remove("sort");
-        request.setAttribute("queryWithNoSort", RequestUtils.parameterMapToQuery(parameterMap));
-        request.setAttribute("sort", sort);
+        parameterMap.remove(SORT_PARAMETER);
+        request.setAttribute(QUERY_WITH_NO_SORT_ATTRIBUTE, RequestUtils.parameterMapToQuery(parameterMap));
+        request.setAttribute(SORT_PARAMETER, sort);
 
-        request.setAttribute("categoryId", categoryId);
-        request.setAttribute("priceFrom", priceFrom);
-        request.setAttribute("priceTo", priceTo);
+        request.setAttribute(CATEGORY_ID_ATTRIBUTE, categoryId);
+        request.setAttribute(PRICE_FROM_PARAMETER, priceFrom);
+        request.setAttribute(PRICE_TO_PARAMETER, priceTo);
 
         // passing list of all brands to view
         String[] brandsArr = new String[allBrands.size()];
-        request.setAttribute("allBrands", allBrands.toArray(brandsArr));
+        request.setAttribute(ALL_BRANDS_ATTRIBUTE, allBrands.toArray(brandsArr));
 
-        request.setAttribute("products", products);
-        request.setAttribute("category", category);
+        request.setAttribute(PRODUCTS_ATTRIBUTE, products);
+        request.setAttribute(CATEGORY_ATTRIBUTE, category);
         request.getRequestDispatcher(CATEGORY_VIEW_PATH).forward(request, response);
     }
 

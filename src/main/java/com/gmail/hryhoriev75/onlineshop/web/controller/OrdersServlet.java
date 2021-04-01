@@ -26,13 +26,15 @@ import java.util.List;
 @WebServlet(name = "OrdersServlet", value = Path.ORDERS_PATH)
 public class OrdersServlet extends HttpServlet {
 
-    private static final String ORDERS_VIEW_PATH = "/WEB-INF/jsp/orders.jsp";
+    public static final String ORDERS_VIEW_PATH = "/WEB-INF/jsp/orders.jsp";
+    public static final String USER_ATTRIBUTE = "user";
+    public static final String ORDERS_ATTRIBUTE = "orders";
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        User user = RequestUtils.getSessionAttribute(request, "user", User.class);
+        User user = RequestUtils.getSessionAttribute(request, USER_ATTRIBUTE, User.class);
         if (user != null) {
             List<Order> orders = OrderDAO.getOrdersByUserId(user.getId());
-            request.setAttribute("orders", orders);
+            request.setAttribute(ORDERS_ATTRIBUTE, orders);
             request.getRequestDispatcher(ORDERS_VIEW_PATH).forward(request, response);
             return;
         }

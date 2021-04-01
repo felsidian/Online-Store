@@ -27,11 +27,19 @@ import java.util.List;
 @WebServlet(name = "OrderServlet", value = Path.ORDER_PATH)
 public class OrderServlet extends HttpServlet {
 
-    private static final String ORDER_VIEW_PATH = "/WEB-INF/jsp/order.jsp";
+    public static final String ORDER_VIEW_PATH = "/WEB-INF/jsp/order.jsp";
+
+    public static final String ID_PARAMETER = "id";
+    public static final String USER_ATTRIBUTE = "user";
+    public static final String ORDER_CONTENT_ATTRIBUTE = "orderContent";
+    public static final String ORDER_ATTRIBUTE = "order";
+    public static final String ORDER_OWNER_ATTRIBUTE = "orderOwner";
+    public static final String CART_ITEMS_DELIMITER = ";";
+    public static final String ID_QUERY = "?id=";
 
     // showing order content
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        long orderId = RequestUtils.getLongParameter(request, "id");
+        long orderId = RequestUtils.getLongParameter(request, ID_PARAMETER);
         if (orderId <= 0) {
             request.getRequestDispatcher(Path.NOT_FOUND_PATH).forward(request, response);
             return;
@@ -41,13 +49,13 @@ public class OrderServlet extends HttpServlet {
             request.getRequestDispatcher(Path.NOT_FOUND_PATH).forward(request, response);
             return;
         }
-        User user = RequestUtils.getSessionAttribute(request, "user", User.class);
+        User user = RequestUtils.getSessionAttribute(request, USER_ATTRIBUTE, User.class);
         if (user != null && (order.getUserId() == user.getId() || user.getRole().isAdmin())) {
             List<Order.Record> orderContent = OrderDAO.getOrderContent(order.getId());
             User orderOwner = UserDAO.findUserById(order.getUserId());
-            request.setAttribute("orderContent", orderContent);
-            request.setAttribute("order", order);
-            request.setAttribute("orderOwner", orderOwner);
+            request.setAttribute(ORDER_CONTENT_ATTRIBUTE, orderContent);
+            request.setAttribute(ORDER_ATTRIBUTE, order);
+            request.setAttribute(ORDER_OWNER_ATTRIBUTE, orderOwner);
             request.getRequestDispatcher(ORDER_VIEW_PATH).forward(request, response);
             return;
         }
@@ -57,10 +65,10 @@ public class OrderServlet extends HttpServlet {
     // creating order
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<Order.Record> orderContent = parseCartParameterString(request.getParameter("cart"));
-        User user = RequestUtils.getSessionAttribute(request, "user", User.class);
+        User user = RequestUtils.getSessionAttribute(request, USER_ATTRIBUTE, User.class);
         if(!orderContent.isEmpty() && user != null) {
             long orderId = OrderDAO.createOrder(user.getId(), Instant.now(), orderContent);
-            response.sendRedirect(Path.ORDER_PATH + "?id=" + orderId);
+            response.sendRedirect(Path.ORDER_PATH + ID_QUERY + orderId);
         } else {
             request.getRequestDispatcher(Path.NOT_FOUND_PATH).forward(request, response);
         }
@@ -70,7 +78,7 @@ public class OrderServlet extends HttpServlet {
     private List<Order.Record> parseCartParameterString(String cartParameter) {
         List<Order.Record> orderContent = new ArrayList<>();
         if(cartParameter != null && cartParameter.length() > 0) {
-            String[] cartItems = cartParameter.split(";");
+            String[] cartItems = cartParameter.split(CART_ITEMS_DELIMITER);
             for (int i = 0; i < cartItems.length - 1; i += 2) {
                 long id = 0;
                 int quantity = 0;

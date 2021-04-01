@@ -21,11 +21,12 @@ import java.util.List;
 @WebServlet(name = "AllOrdersServlet", value = Path.ALL_ORDERS_PATH)
 public class AllOrdersServlet extends HttpServlet {
 
-    private static final String ORDERS_VIEW_PATH = "/WEB-INF/jsp/all_orders.jsp";
+    public static final String ORDERS_VIEW_PATH = "/WEB-INF/jsp/all_orders.jsp";
+    public static final String ORDERS_ATTRIBUTE = "orders";
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<Order> orders = OrderDAO.getAllOrders();
-        request.setAttribute("orders", orders);
+        request.setAttribute(ORDERS_ATTRIBUTE, orders);
         request.getRequestDispatcher(ORDERS_VIEW_PATH).forward(request, response);
     }
 

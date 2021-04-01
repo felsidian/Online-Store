@@ -35,6 +35,13 @@ public class ProductDAO {
     // Maps sorting parameter with corresponding order
     private static final Map<String, String> SORT_DIRECTION_MAP = Map.of(Constants.SORT_A_Z, "ASC", Constants.SORT_Z_A, "DESC",
             Constants.SORT_CHEAP_FIRST, "ASC", Constants.SORT_EXPENSIVE_FIRST, "DESC", Constants.SORT_NEW_FIRST, "DESC");
+    public static final String SQL_FIND_PRODUCT_BY_ID = "SELECT * FROM product LEFT JOIN category ON category_id=category.id WHERE product.id=?";
+    public static final String SQL_GET_POPULAR_PRODUCTS = "SELECT *, COUNT(*) as count FROM order_content JOIN product ON product_id=product.id GROUP BY product_id ORDER BY count DESC LIMIT ?";
+    public static final String SQL_GET_ALL_CATEGORIES = "SELECT * FROM category";
+    public static final String SQL_GET_BRANDS_BY_CATEGORY = "SELECT brand FROM product WHERE category_id = ? GROUP BY brand";
+    public static final String SQL_GET_CATEGORY_BY_ID = "SELECT * FROM category WHERE id=?";
+    public static final String SQL_INSERT_PRODUCT = "INSERT INTO product(name,brand,description,create_time,price,image_url,category_id,power,weight,country)VALUES(?,?,?,?,?,?,?,?,?,?)";
+    public static final String SQL_UPDATE_PRODUCT = "UPDATE product SET name=?,brand=?,description=?,create_time=?,price=?,image_url=?,category_id=?,power=?,weight=?,country=? WHERE id=?";
 
     /**
      * @param id Product identifier
@@ -43,8 +50,7 @@ public class ProductDAO {
     public static Product findProductById(long id) {
         Product product = null;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT * FROM product LEFT JOIN category " +
-                     "ON category_id=category.id WHERE product.id=?")) {
+             PreparedStatement pst = con.prepareStatement(SQL_FIND_PRODUCT_BY_ID)) {
             pst.setLong(1, id);
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
@@ -66,8 +72,7 @@ public class ProductDAO {
     public static List<Product> getPopularProducts(long limit) {
         List<Product> products = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT *, COUNT(*) as count FROM order_content JOIN product " +
-                     "ON product_id=product.id GROUP BY product_id ORDER BY count DESC LIMIT ?")) {
+             PreparedStatement pst = con.prepareStatement(SQL_GET_POPULAR_PRODUCTS)) {
             pst.setLong(1, limit);
             try(ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
@@ -86,7 +91,7 @@ public class ProductDAO {
     public static List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT * FROM category");
+             PreparedStatement pst = con.prepareStatement(SQL_GET_ALL_CATEGORIES);
              ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     categories.add(mapCategory(rs));
@@ -105,7 +110,7 @@ public class ProductDAO {
     public static List<String> getBrandsByCategory(long categoryId) {
         List<String> brands = new ArrayList<>();
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT brand FROM product WHERE category_id = ? GROUP BY brand")) {
+             PreparedStatement pst = con.prepareStatement(SQL_GET_BRANDS_BY_CATEGORY)) {
              pst.setLong(1, categoryId);
              try (ResultSet rs = pst.executeQuery()) {
                  while (rs.next()) {
@@ -168,7 +173,7 @@ public class ProductDAO {
     public static Category findCategoryById(long id) {
         Category category = null;
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement("SELECT * FROM category WHERE id=?")) {
+             PreparedStatement pst = con.prepareStatement(SQL_GET_CATEGORY_BY_ID)) {
             pst.setLong(1, id);
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
@@ -190,12 +195,8 @@ public class ProductDAO {
     public static long addOrUpdateProduct(Product product) {
         long productId = 0;
         // Since insert and update SQL queries are similar, we preparing statement in one line
-        String insertSql = "INSERT INTO product(name,brand,description,create_time," +
-                "price,image_url,category_id,power,weight,country)VALUES(?,?,?,?,?,?,?,?,?,?)";
-        String updateSql = "UPDATE product SET name=?,brand=?,description=?,create_time=?," +
-                "price=?,image_url=?,category_id=?,power=?,weight=?,country=? WHERE id=?";
         try (Connection con = DBHelper.getInstance().getConnection();
-             PreparedStatement pst = con.prepareStatement(product.getId() > 0 ? updateSql : insertSql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement pst = con.prepareStatement(product.getId() > 0 ? SQL_UPDATE_PRODUCT : SQL_INSERT_PRODUCT, Statement.RETURN_GENERATED_KEYS)) {
             pst.setString(1, product.getName());
             pst.setString(2, product.getBrand());
             pst.setString(3, product.getDescription());
